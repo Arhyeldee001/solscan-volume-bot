@@ -3967,7 +3967,7 @@ If you have any questions, check out admin</b>
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         # Send a new message with image
-        image_file = open('pumpfun_image.jpg', 'rb')
+        image_file = open('pumpfun_image.JPG', 'rb')
         await query.message.reply_photo(
             photo=image_file,
             caption=f'''
