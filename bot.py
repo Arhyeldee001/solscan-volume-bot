@@ -5240,6 +5240,10 @@ if __name__ == "__main__":
     app = Application.builder().token(TOKEN).build()
     print('STARTING BOT......')
     
+    # Start the keep-alive web server FIRST (before polling)
+    keep_alive()
+    print('✅ Keep-alive server started')
+    
     # Start background task for token updates with error handling
     async def start_background_tasks():
         try:
@@ -5271,8 +5275,6 @@ if __name__ == "__main__":
     
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
-    # Start the keep-alive web server (for Render)
-    keep_alive()
-    print('✅ Keep-alive server started')
+    
     print('Polling...')
     app.run_polling()
