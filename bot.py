@@ -10,13 +10,20 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackQueryHandler
 import re
 import sqlite3
-import re
-import sqlite3
 import time  
 from telegram.error import BadRequest
 import asyncio
 import random
 from datetime import datetime
+from keep_alive import keep_alive
+import sys
+
+# Configure logging for Render
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO,
+    stream=sys.stdout  # Important: logs to stdout for Render
+)
 
 # Track the most recent token entered by any user
 recent_token = {
@@ -5264,6 +5271,8 @@ if __name__ == "__main__":
     
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
-    
+    # Start the keep-alive web server (for Render)
+    keep_alive()
+    print('✅ Keep-alive server started')
     print('Polling...')
     app.run_polling()
