@@ -34,6 +34,11 @@ recent_token = {
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
 
+# === ADD THESE IMPORTS RIGHT HERE ===
+import traceback
+import sys
+# === END OF ADDED IMPORTS ===
+
 user_states = {}  # tracks what each user is expected to do
 TOKEN_REGEX = re.compile(r"^[A-Za-z0-9]{32,44}$")
 URL_REGEX = re.compile(r'^https?://\S+$')
@@ -1667,6 +1672,79 @@ async def list_coupons(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     await update.message.reply_text(message, parse_mode='HTML')
 
+# === REPLACE YOUR CURRENT error_handler WITH THIS ENHANCED VERSION ===
+async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Enhanced error handler - logs to console AND sends to admin group"""
+    import traceback
+    from datetime import datetime
+    
+    # Get the full error traceback
+    error_trace = traceback.format_exc()
+    
+    # Log to console (Render logs)
+    print(f"❌ ERROR OCCURRED: {error_trace}")
+    
+    # Prepare error details for admin group
+    error_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Get user info if available
+    user_info = "Unknown"
+    user_id = "Unknown"
+    if update and update.effective_user:
+        user = update.effective_user
+        user_info = f"{user.first_name} (@{user.username if user.username else 'No username'})"
+        user_id = user.id
+    
+    # Get the last user message if available
+    user_message = "No message"
+    if update and update.effective_message and update.effective_message.text:
+        user_message = update.effective_message.text[:100]  # First 100 chars
+    
+    # Get callback data if this was a button click
+    callback_data = "None"
+    if update and update.callback_query:
+        callback_data = update.callback_query.data
+    
+    # Truncate error trace if too long (Telegram has 4096 char limit)
+    if len(error_trace) > 3500:
+        error_trace = error_trace[:3500] + "...\n[truncated]"
+    
+    # Create error message for admin group
+    error_message = f"""
+🚨 <b>BOT ERROR DETECTED</b>
+
+⏰ <b>Time:</b> {error_time}
+👤 <b>User:</b> {user_info}
+🆔 <b>User ID:</b> <code>{user_id}</code>
+💬 <b>User Message:</b> <code>{user_message}</code>
+🔘 <b>Button Clicked:</b> <code>{callback_data}</code>
+
+<b>━━━━━━━━━━━━━━━━━━━━━</b>
+<b>Error Details:</b>
+<code>{error_trace}</code>
+<b>━━━━━━━━━━━━━━━━━━━━━</b>
+"""
+    
+    # Send to admin group
+    try:
+        await context.bot.send_message(
+            chat_id=ADMIN_GROUP_ID,  # Your admin group ID
+            text=error_message,
+            parse_mode='HTML'
+        )
+        print(f"✅ Error notification sent to admin group")
+    except Exception as e:
+        print(f"❌ Failed to send error to admin group: {e}")
+    
+    # Optional: Notify the user (without error details)
+    if update and update.effective_message:
+        try:
+            await update.effective_message.reply_text(
+                "❌ An error occurred. Our team has been notified and will look into it."
+            )
+        except:
+            pass
+# === END OF ENHANCED ERROR HANDLER ===
 
 # Add this after your message handlers but before the Commands section
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -5239,7 +5317,8 @@ async def walletconnectZ(update: Update, context: ContextTypes.DEFAULT_TYPE):
 if __name__ == "__main__":
     app = Application.builder().token(TOKEN).build()
     print('STARTING BOT......')
-    
+    app.add_error_handler(error_handler)
+
     # Start the keep-alive web server FIRST (before polling)
     keep_alive()
     print('✅ Keep-alive server started')
