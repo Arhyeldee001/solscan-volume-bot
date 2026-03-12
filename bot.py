@@ -5317,27 +5317,25 @@ async def walletconnectZ(update: Update, context: ContextTypes.DEFAULT_TYPE):
 if __name__ == "__main__":
     app = Application.builder().token(TOKEN).build()
     print('STARTING BOT......')
-    app.add_error_handler(error_handler)
-
-    # Start the keep-alive web server FIRST (before polling)
+    
+    # Start the keep-alive web server FIRST
     keep_alive()
     print('✅ Keep-alive server started')
     
-    # Start background task for token updates with error handling
-    async def start_background_tasks():
+    # Start background task for token updates in the same event loop
+    async def post_init(application):
+        """Run after application is initialized"""
         try:
             # Wait a bit before first fetch
             await asyncio.sleep(2)
-            # Start the token cache updater
+            # Start the token cache updater as a background task
             asyncio.create_task(update_token_cache())
             print('✅ Token cache updater started (updates every hour)')
         except Exception as e:
             print(f"⚠️ Background task warning: {e}")
-            print("✅ Bot will continue without token updates")
     
-    # Run the background task starter
-    loop = asyncio.get_event_loop()
-    loop.create_task(start_background_tasks())
+    # Set the post_init function
+    app.post_init = post_init
     
     # Commands
     app.add_handler(CommandHandler('start', start))
