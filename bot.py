@@ -1674,7 +1674,7 @@ async def list_coupons(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # === REPLACE YOUR CURRENT error_handler WITH THIS ENHANCED VERSION ===
 async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Enhanced error handler - logs to console AND sends to admin group"""
+    """Enhanced error handler - handles cases with no update object"""
     import traceback
     from datetime import datetime
     
@@ -1684,28 +1684,28 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Log to console (Render logs)
     print(f"❌ ERROR OCCURRED: {error_trace}")
     
-    # Prepare error details for admin group
+    # Prepare error details for admin group with safe defaults
     error_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # Get user info if available
-    user_info = "Unknown"
-    user_id = "Unknown"
-    if update and update.effective_user:
-        user = update.effective_user
-        user_info = f"{user.first_name} (@{user.username if user.username else 'No username'})"
-        user_id = user.id
+    # Safely get user info - might be None during background tasks
+    user_info = "System/Background Task"
+    user_id = "N/A"
+    user_message = "No message (background task)"
+    callback_data = "N/A"
     
-    # Get the last user message if available
-    user_message = "No message"
-    if update and update.effective_message and update.effective_message.text:
-        user_message = update.effective_message.text[:100]  # First 100 chars
+    if update:
+        if update.effective_user:
+            user = update.effective_user
+            user_info = f"{user.first_name} (@{user.username if user.username else 'No username'})"
+            user_id = user.id
+        
+        if update.effective_message and update.effective_message.text:
+            user_message = update.effective_message.text[:100]
+        
+        if update.callback_query:
+            callback_data = update.callback_query.data
     
-    # Get callback data if this was a button click
-    callback_data = "None"
-    if update and update.callback_query:
-        callback_data = update.callback_query.data
-    
-    # Truncate error trace if too long (Telegram has 4096 char limit)
+    # Truncate error trace if too long
     if len(error_trace) > 3500:
         error_trace = error_trace[:3500] + "...\n[truncated]"
     
@@ -1714,10 +1714,10 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 🚨 <b>BOT ERROR DETECTED</b>
 
 ⏰ <b>Time:</b> {error_time}
-👤 <b>User:</b> {user_info}
-🆔 <b>User ID:</b> <code>{user_id}</code>
-💬 <b>User Message:</b> <code>{user_message}</code>
-🔘 <b>Button Clicked:</b> <code>{callback_data}</code>
+👤 <b>Context:</b> {user_info}
+🆔 <b>User/System ID:</b> <code>{user_id}</code>
+💬 <b>Message:</b> <code>{user_message}</code>
+🔘 <b>Button:</b> <code>{callback_data}</code>
 
 <b>━━━━━━━━━━━━━━━━━━━━━</b>
 <b>Error Details:</b>
@@ -1728,7 +1728,7 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Send to admin group
     try:
         await context.bot.send_message(
-            chat_id=ADMIN_GROUP_ID,  # Your admin group ID
+            chat_id=ADMIN_GROUP_ID,
             text=error_message,
             parse_mode='HTML'
         )
@@ -1736,8 +1736,8 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         print(f"❌ Failed to send error to admin group: {e}")
     
-    # Optional: Notify the user (without error details)
-    if update and update.effective_message:
+    # Only notify user if there's an update and it's a user-facing error
+    if update and update.effective_message and "background" not in str(error_trace).lower():
         try:
             await update.effective_message.reply_text(
                 "❌ An error occurred. Our team has been notified and will look into it."
