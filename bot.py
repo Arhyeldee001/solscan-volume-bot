@@ -2496,7 +2496,6 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
             
             # Create keyboard with support contact
             keyboard = [
-                [InlineKeyboardButton('📞 Contact Support', url='https://t.me/DELUGE_BUMP_SUPPORT')],
                 [InlineKeyboardButton('🔙 Back to Bump Menu', callback_data='startbump')],
                 [InlineKeyboardButton('🏠 Main Menu', callback_data='main')]
             ]
@@ -5313,7 +5312,6 @@ Click Confirm Payment ✅
             
             # Create keyboard with support contact
             keyboard = [
-                [InlineKeyboardButton('📞 Contact Support', url='https://t.me/DELUGE_BUMP_SUPPORT')],
                 [InlineKeyboardButton('🔙 Back to Menu', callback_data='main')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
