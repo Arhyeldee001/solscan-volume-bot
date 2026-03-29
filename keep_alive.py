@@ -4,6 +4,7 @@ import os
 import logging
 
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
@@ -17,14 +18,13 @@ def health():
 
 def run():
     port = int(os.environ.get('PORT', 8080))
-    logging.info(f"Starting Flask server on port {port}")
+    logger.info(f"Starting Flask server on port {port}")
     try:
-        app.run(host='0.0.0.0', port=port, debug=False)
+        app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
     except Exception as e:
-        logging.error(f"Flask server failed: {e}")
+        logger.error(f"Flask server error: {e}")
 
 def keep_alive():
-    t = Thread(target=run)
-    t.daemon = True
+    t = Thread(target=run, daemon=True)
     t.start()
-    logging.info("Flask thread started")
+    logger.info("Flask thread started (daemon)")
