@@ -407,6 +407,16 @@ def init_db():
 
 init_db()
 
+# TEMPORARY FIX: add missing column
+conn = sqlite3.connect("wallets.db")
+cursor = conn.cursor()
+try:
+    cursor.execute("ALTER TABLE user_wallets ADD COLUMN last_used TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    conn.commit()
+except:
+    pass
+conn.close()
+
 WALLET_ADDRESSES = [
     "3UrQziUTpj5YtUAqncDqwJ44nFSB6pmHshkof3FdFqg3",
     "HCj958Pw1AsoGMbMirJ4gWqvcaHLdReYeTuSAjTDCzmj",
