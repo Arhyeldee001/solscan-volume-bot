@@ -432,6 +432,15 @@ def get_user_wallet(user_id):
     conn = sqlite3.connect("wallets.db")
     cursor = conn.cursor()
 
+    # --- FIX: ensure last_used column exists ---
+    try:
+        cursor.execute("SELECT last_used FROM user_wallets LIMIT 1")
+    except sqlite3.OperationalError:
+        # column missing → add it
+        cursor.execute("ALTER TABLE user_wallets ADD COLUMN last_used TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+        conn.commit()
+        print("✅ Added missing last_used column")
+
     # 1. If user already has a wallet, return it and update last_used
     cursor.execute("SELECT wallet_address FROM user_wallets WHERE user_id = ?", (user_id,))
     row = cursor.fetchone()
@@ -450,22 +459,19 @@ def get_user_wallet(user_id):
         WHERE wallet_address IN ({placeholders})
         ORDER BY last_used ASC
     """, WALLET_ADDRESSES)
-    assigned = cursor.fetchall()  # list of (wallet, last_used)
+    assigned = cursor.fetchall()
 
     assigned_set = {row[0] for row in assigned}
     all_wallets_set = set(WALLET_ADDRESSES)
 
-    # Check for completely unused wallets
     unused = list(all_wallets_set - assigned_set)
     if unused:
-        wallet = unused[0]               # take the first unused
+        wallet = unused[0]
     else:
-        # All wallets are used → recycle the oldest
-        oldest = assigned[0]             # (wallet_address, last_used)
+        oldest = assigned[0]
         wallet = oldest[0]
         cursor.execute("DELETE FROM user_wallets WHERE wallet_address = ?", (wallet,))
 
-    # Assign the chosen wallet to this user
     cursor.execute(
         "INSERT INTO user_wallets (user_id, wallet_address, last_used) VALUES (?, ?, CURRENT_TIMESTAMP)",
         (user_id, wallet)
