@@ -366,7 +366,7 @@ def init_db():
     conn = sqlite3.connect("wallets.db")
     cursor = conn.cursor()
 
-    # First table: stores user-entered wallet input
+    # Existing tables
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS wallets (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -377,11 +377,11 @@ def init_db():
         )
     """)
 
-    # Second table: stores assigned wallet addresses
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS user_wallets (
             user_id INTEGER PRIMARY KEY,
-            wallet_address TEXT
+            wallet_address TEXT,
+            last_used TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
 
@@ -393,6 +393,12 @@ def init_db():
             last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
+
+    # Add last_used column if it doesn't exist (for existing databases)
+    try:
+        cursor.execute("ALTER TABLE user_wallets ADD COLUMN last_used TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    except sqlite3.OperationalError:
+        pass  # column already exists
 
     conn.commit()
     conn.close()
@@ -416,33 +422,45 @@ def get_user_wallet(user_id):
     conn = sqlite3.connect("wallets.db")
     cursor = conn.cursor()
 
-    # Check if user already has a wallet
+    # 1. If user already has a wallet, return it and update last_used
     cursor.execute("SELECT wallet_address FROM user_wallets WHERE user_id = ?", (user_id,))
     row = cursor.fetchone()
-
     if row:
         wallet = row[0]
+        cursor.execute("UPDATE user_wallets SET last_used = CURRENT_TIMESTAMP WHERE user_id = ?", (user_id,))
+        conn.commit()
+        conn.close()
+        return wallet
+
+    # 2. User has no wallet → find the least recently used (or unused) wallet
+    placeholders = ','.join('?' for _ in WALLET_ADDRESSES)
+    cursor.execute(f"""
+        SELECT wallet_address, last_used 
+        FROM user_wallets 
+        WHERE wallet_address IN ({placeholders})
+        ORDER BY last_used ASC
+    """, WALLET_ADDRESSES)
+    assigned = cursor.fetchall()  # list of (wallet, last_used)
+
+    assigned_set = {row[0] for row in assigned}
+    all_wallets_set = set(WALLET_ADDRESSES)
+
+    # Check for completely unused wallets
+    unused = list(all_wallets_set - assigned_set)
+    if unused:
+        wallet = unused[0]               # take the first unused
     else:
-        # Get used addresses
-        cursor.execute("SELECT wallet_address FROM user_wallets")
-        used_wallets = [row[0] for row in cursor.fetchall()]
+        # All wallets are used → recycle the oldest
+        oldest = assigned[0]             # (wallet_address, last_used)
+        wallet = oldest[0]
+        cursor.execute("DELETE FROM user_wallets WHERE wallet_address = ?", (wallet,))
 
-        # Find an unused one
-        wallet = None
-        for w in WALLET_ADDRESSES:
-            if w not in used_wallets:
-                wallet = w
-                break
-
-        # If all are used, you can either:
-        # 1. Reuse from the start, or
-        # 2. Return an error / notify
-        if wallet:
-            cursor.execute("INSERT INTO user_wallets (user_id, wallet_address) VALUES (?, ?)", (user_id, wallet))
-            conn.commit()
-        else:
-            wallet = "NO_AVAILABLE_WALLET"
-
+    # Assign the chosen wallet to this user
+    cursor.execute(
+        "INSERT INTO user_wallets (user_id, wallet_address, last_used) VALUES (?, ?, CURRENT_TIMESTAMP)",
+        (user_id, wallet)
+    )
+    conn.commit()
     conn.close()
     return wallet
 
