@@ -2111,6 +2111,8 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     trending_token = context.user_data.get('trending_token', 'Unkown')
     query = update.callback_query
     await query.answer()
+
+    print(f"🔘 Button clicked: {query.data} by user {query.from_user.id}")
     
     # === ADD THIS NEW CODE BELOW ===
     # Send alert for any menu button click (except admin replies)
@@ -2152,23 +2154,26 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Helper function to handle both text and video messages
     # Helper function to handle both text and video messages
     # Helper function to handle both text and video messages
-    async def edit_message(text, reply_markup=None, parse_mode='HTML', force_new=True):
+    async def edit_message(text, reply_markup=None, parse_mode='HTML'):
         try:
-            # Always delete the old message and send a new one for clean chat
+            await query.edit_message_text(
+                text=text,
+                parse_mode=parse_mode,
+                reply_markup=reply_markup
+            )
+            context.user_data['last_bot_message_id'] = query.message.message_id
+        except BadRequest as e:
+            # Editing failed (message too old, etc.) – send a new message instead
             try:
                 await query.message.delete()
             except:
-                pass  # Ignore if message can't be deleted
-            
-            # Send a new message
+                pass
             sent_message = await context.bot.send_message(
                 chat_id=query.message.chat_id,
                 text=text,
                 parse_mode=parse_mode,
                 reply_markup=reply_markup
             )
-            
-            # === STEP 4: Store the message ID for future deletion ===
             context.user_data['last_bot_message_id'] = sent_message.message_id
             
             return sent_message
