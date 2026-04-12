@@ -407,37 +407,29 @@ def init_db():
 
 init_db()
 
-# TEMPORARY FIX: add missing column
 conn = sqlite3.connect("wallets.db")
 cursor = conn.cursor()
 try:
-    cursor.execute("ALTER TABLE user_wallets ADD COLUMN last_used TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    cursor.execute("ALTER TABLE user_wallets ADD COLUMN last_used TIMESTAMP")
+    cursor.execute("UPDATE user_wallets SET last_used = CURRENT_TIMESTAMP WHERE last_used IS NULL")
     conn.commit()
-except:
-    pass
+    print("✅ Column fixed")
+except Exception as e:
+    print("Column already OK:", e)
 conn.close()
-
-WALLET_ADDRESSES = [
-    "3UrQziUTpj5YtUAqncDqwJ44nFSB6pmHshkof3FdFqg3",
-    "HCj958Pw1AsoGMbMirJ4gWqvcaHLdReYeTuSAjTDCzmj",
-    "GYyFUyBg6ydMn7PGJVN9Lb2VTP2ECvm7BsnGnygsB44T",
-    "BLFE2t58AJoy2FbiSs6Mvy1YMy3Sya41KgCU3JDwXLAS",
-    "7StcZj7dFPJbnwvdTTi28XVMbvxFMXi7dxpu9pvTyfjt",
-    "CpXeCiYB3y1UMejPQuo5w3VJYFRoSfMW8db3DnJt8qq7",
-    "FaFBzPK7T7MLMYqps1eHmNTNfkXZ1kbJSB9STw9h2qwm"
-]
-
 
 def get_user_wallet(user_id):
     conn = sqlite3.connect("wallets.db")
     cursor = conn.cursor()
 
-    # --- FIX: ensure last_used column exists ---
+    # --- FIX: ensure last_used column exists (SQLite compatible) ---
     try:
         cursor.execute("SELECT last_used FROM user_wallets LIMIT 1")
     except sqlite3.OperationalError:
-        # column missing → add it
-        cursor.execute("ALTER TABLE user_wallets ADD COLUMN last_used TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+        # column missing → add it (without DEFAULT, then set default later if needed)
+        cursor.execute("ALTER TABLE user_wallets ADD COLUMN last_used TIMESTAMP")
+        # Update existing rows to current timestamp
+        cursor.execute("UPDATE user_wallets SET last_used = CURRENT_TIMESTAMP WHERE last_used IS NULL")
         conn.commit()
         print("✅ Added missing last_used column")
 
@@ -479,7 +471,6 @@ def get_user_wallet(user_id):
     conn.commit()
     conn.close()
     return wallet
-
 
 
 # This part is for setting up logging module, so you will know when (and why) things don't work as expected:
