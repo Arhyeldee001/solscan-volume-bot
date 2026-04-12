@@ -2178,20 +2178,7 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
             return sent_message
                 
-        except BadRequest as e:
-            print(f"Failed to send message: {e}")
-            # Try sending as fallback
-            try:
-                sent_message = await context.bot.send_message(
-                    chat_id=query.message.chat_id,
-                    text=text,
-                    parse_mode=parse_mode,
-                    reply_markup=reply_markup
-                )
-                context.user_data['last_bot_message_id'] = sent_message.message_id
-                return sent_message
-            except:
-                pass
+    
 
     if query.data == 'main':
         # Clear any stored bump amounts
