@@ -333,7 +333,7 @@ async def update_token_cache():
             await asyncio.sleep(60)
 
 # Add a fallback message in case API is down
-FALLBACK_TOKENS = """Recent Token From Raydium Vol Bot
+FALLBACK_TOKENS = """Recent Token From @RaydiumSPLBot
 💊 Solana • $SOL
 💊 Raydium • $RAY
 💊 Jupiter • $JUP
@@ -354,8 +354,8 @@ def get_cached_tokens():
         if "Unable to fetch" in base_message or "Error" in base_message:
             return FALLBACK_TOKENS
         
-        # Add the "Recent Token From Raydium Vol Bot" header and timestamp
-        return f"Recent Token From Raydium Vol Bot\n{base_message}Updated: {hours}h {minutes}m ago"
+        # Add the "Recent Token From @RaydiumSPLBot" header and timestamp
+        return f"Recent Token From @RaydiumSPLBot\n{base_message}Updated: {hours}h {minutes}m ago"
     
     # If no update yet, return fallback
     return FALLBACK_TOKENS
