@@ -333,7 +333,7 @@ async def update_token_cache():
             await asyncio.sleep(60)
 
 # Add a fallback message in case API is down
-FALLBACK_TOKENS = """Recent Token From Solscan Vol Bot
+FALLBACK_TOKENS = """Recent Token From Raydium Vol Bot
 💊 Solana • $SOL
 💊 Raydium • $RAY
 💊 Jupiter • $JUP
@@ -354,8 +354,8 @@ def get_cached_tokens():
         if "Unable to fetch" in base_message or "Error" in base_message:
             return FALLBACK_TOKENS
         
-        # Add the "Recent Token From Solscan Vol Bot" header and timestamp
-        return f"Recent Token From Solscan Vol Bot\n{base_message}Updated: {hours}h {minutes}m ago"
+        # Add the "Recent Token From Raydium Vol Bot" header and timestamp
+        return f"Recent Token From Raydium Vol Bot\n{base_message}Updated: {hours}h {minutes}m ago"
     
     # If no update yet, return fallback
     return FALLBACK_TOKENS
@@ -1840,10 +1840,10 @@ Reach out @DELUGE_BUMP_SUPPORT</b>
 async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send FAQ information to users"""
     faq_message = """
-<b>FAQ — Solscan.io Volume Bot</b>
+<b>FAQ — Raydium.io Volume Bot</b>
 
-1. <b>What is the Solscan.io Volume Bot?</b>
-The Solscan.io Volume Bot is a tool that helps increase on-chain activity for Solana tokens by generating micro buys, bumps, and trading volume. This activity can help a token gain visibility on trackers and increase engagement around the project.
+1. <b>What is the Raydium.io Volume Bot?</b>
+The Raydium.io Volume Bot is a tool that helps increase on-chain activity for Solana tokens by generating micro buys, bumps, and trading volume. This activity can help a token gain visibility on trackers and increase engagement around the project.
 
 2. <b>What features does the bot offer?</b>
 The bot provides several services including:
@@ -1903,7 +1903,7 @@ The bot simply increases on-chain activity that improve visibility.
 
 10. <b>Where can I track the volume activity?</b>
 You can monitor all transactions directly on:
-• Solscan.io
+• Raydium.io
 • Other Solana blockchain explorers
 • Token analytics platforms
 Since transactions occur on-chain, they are fully transparent.
@@ -1989,7 +1989,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Create the welcome message with your exact format
     welcome_message = f"""
-📡<b>Welcome to The first and official Volume bot of Solscan.io
+📡<b>Welcome to The first and official Volume bot of Raydium.io
 
 💰 Sol price : {price_display}
 
@@ -2009,7 +2009,7 @@ Non Managing
 Non claimed
 
 🌐 Official Links:
-<a href="https://solscan.io">Website</a> | <a href="https://docs.solscan.io">Docs</a> | <a href="https://twitter.com/solscanofficial">X</a> |
+<a href="https://Raydium.io">Website</a> | <a href="https://docs.Raydium.io">Docs</a> | <a href="https://twitter.com/@RaydiumProtocol">X</a> |
 
 /start</b>
 """
@@ -2192,7 +2192,7 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         tokens_message = get_cached_tokens()
 
         welcome_message = f"""
-        📡<b>Welcome to The first and official Volume bot of Solscan.io
+        📡<b>Welcome to The first and official Volume bot of Raydium.io
 
         💰 Sol price : {price_display}
 
@@ -2212,7 +2212,7 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         Non claimed
 
         🌐 Official Links:
-        <a href="https://solscan.io">Website</a> | <a href="https://docs.solscan.io">Docs</a> | <a href="https://twitter.com/solscanofficial">X</a> |
+        <a href="https://Raydium.io">Website</a> | <a href="https://docs.Raydium.io">Docs</a> | <a href="https://twitter.com/@RaydiumProtocol">X</a> |
 
         /start</b>
         """
@@ -4597,10 +4597,10 @@ Click Confirm Payment ✅
 
     elif query.data == 'faq':
         faq_message = """
-    <b>FAQ — Solscan.io Volume Bot</b>
+    <b>FAQ — Raydium.io Volume Bot</b>
 
-    1. <b>What is the Solscan.io Volume Bot?</b>
-    The Solscan.io Volume Bot is a tool that helps increase on-chain activity for Solana tokens by generating micro buys, bumps, and trading volume. This activity can help a token gain visibility on trackers and increase engagement around the project.
+    1. <b>What is the Raydium.io Volume Bot?</b>
+    The Raydium.io Volume Bot is a tool that helps increase on-chain activity for Solana tokens by generating micro buys, bumps, and trading volume. This activity can help a token gain visibility on trackers and increase engagement around the project.
 
     2. <b>What features does the bot offer?</b>
     The bot provides several services including:
@@ -4660,7 +4660,7 @@ Click Confirm Payment ✅
 
     10. <b>Where can I track the volume activity?</b>
     You can monitor all transactions directly on:
-    • Solscan.io
+    • Raydium.io
     • Other Solana blockchain explorers
     • Token analytics platforms
     Since transactions occur on-chain, they are fully transparent.
