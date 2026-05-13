@@ -2247,7 +2247,31 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ? SEND ME CONTRACT ADDRESS</b>
     ''', reply_markup)
         
-
+    elif query.data == 'raydium':
+        # What should happen when user clicks Raydium button?
+        # For example, you could:
+        # 1. Send a message about Raydium
+        # 2. Open a URL to Raydium website
+        # 3. Show Raydium-specific menu options
+        
+        keyboard = [
+            [InlineKeyboardButton('🔙 Back', callback_data='main')]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await edit_message('''
+    <b>🫐 Raydium DEX</b>
+    
+    Raydium is an automated market maker (AMM) built on the Solana blockchain.
+    
+    <b>Features:</b>
+    • Fast and low-cost swaps
+    • Liquidity pools
+    • Yield farming
+    • IDO launches
+    
+    Visit: <a href="https://raydium.io">Raydium.io</a>
+    ''', reply_markup, parse_mode='HTML')
     elif query.data == 'bump_random':
         import random
         
