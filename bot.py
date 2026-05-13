@@ -2019,6 +2019,7 @@ Non claimed
         [InlineKeyboardButton("🏆 Trending ", callback_data='trending'),
          InlineKeyboardButton('🔊 Volume Bot', callback_data='volume')],
         [InlineKeyboardButton('💊 PumpFun', callback_data='pumpfun')],
+        [InlineKeyboardButton('🫐 Raydium', callback_data='raydium')],
 
         [InlineKeyboardButton('🆘 Support', url='https://t.me/TacoTabitha')],
     ]
@@ -2218,6 +2219,8 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             [InlineKeyboardButton("🏆 Trending ", callback_data='trending'), 
             InlineKeyboardButton('🔊 Volume Bot', callback_data='volume')],
             [InlineKeyboardButton('💊 PumpFun', callback_data='pumpfun')],
+            [InlineKeyboardButton('🫐 Raydium', callback_data='raydium')],
+
             [InlineKeyboardButton('🆘 Support', url='https://t.me/TacoTabitha')],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
