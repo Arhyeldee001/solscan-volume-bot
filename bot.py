@@ -1993,8 +1993,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 💰 Sol price : {price_display}
 
-🟢 Buy - Bot @buybot
-🤖 We helped 14045 users to promote 26260 tokens!
 
 {tokens_message}
 
