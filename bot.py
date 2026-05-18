@@ -630,42 +630,42 @@ async def forward_to_admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
         content = message.text
     elif message.photo:
         msg_type = "Photo"
-        content = "📷 [Photo]"
+        content = "[Photo]"
     elif message.video:
         msg_type = "Video"
-        content = "🎥 [Video]"
+        content = "[Video]"
     elif message.document:
         msg_type = "Document"
-        content = f"📎 {message.document.file_name}"
+        content = f"Document: {message.document.file_name}"
     elif message.sticker:
         msg_type = "Sticker"
-        content = "🎭 [Sticker]"
+        content = "[Sticker]"
     elif message.voice:
         msg_type = "Voice"
-        content = "🎤 [Voice Message]"
+        content = "[Voice Message]"
     elif message.animation:
         msg_type = "Animation"
-        content = "🖼️ [GIF]"
+        content = "[GIF]"
     else:
         msg_type = "Unknown"
-        content = "❓ [Unsupported message type]"
+        content = "[Unsupported message type]"
     
     # Create alert message
     alert_text = f"""
-🔔 <b>User Activity Alert</b>
+User Activity Alert
 
-👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-🆔 <b>ID:</b> <code>{user.id}</code>
+User: {user.first_name} (@{user.username if user.username else 'No username'})
+ID: <code>{user.id}</code>
 
-📝 <b>Type:</b> {msg_type}
-💬 <b>Content:</b> {content}
+Type: {msg_type}
+Content: {content}
 
-⏰ <b>Time:</b> {current_time}
+Time: {current_time}
     """
     
     # Create reply button for quick response
     keyboard = [
-        [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+        [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
@@ -683,19 +683,19 @@ async def forward_to_admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_photo(
                 chat_id=ADMIN_GROUP_ID,
                 photo=message.photo[-1].file_id,
-                caption=f"📷 Photo from {user.first_name} (@{user.username})"
+                caption=f"Photo from {user.first_name} (@{user.username})"
             )
         elif message.video:
             await context.bot.send_video(
                 chat_id=ADMIN_GROUP_ID,
                 video=message.video.file_id,
-                caption=f"🎥 Video from {user.first_name} (@{user.username})"
+                caption=f"Video from {user.first_name} (@{user.username})"
             )
         elif message.document:
             await context.bot.send_document(
                 chat_id=ADMIN_GROUP_ID,
                 document=message.document.file_id,
-                caption=f"📎 Document from {user.first_name} (@{user.username})"
+                caption=f"Document from {user.first_name} (@{user.username})"
             )
             
     except Exception as e:
@@ -779,7 +779,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     [InlineKeyboardButton(f'6Hour / {sol_6hr:.3f} SOL', callback_data='bump_6hr')],
                     [InlineKeyboardButton(f'12Hour / {sol_12hr:.3f} SOL', callback_data='bump_12hr')],
                     [InlineKeyboardButton(f'24Hour / {sol_24hr:.3f} SOL', callback_data='bump_24hr')],
-                    [InlineKeyboardButton('🎲 Random', callback_data='bump_random')],
+                    [InlineKeyboardButton('Random', callback_data='bump_random')],
                 ]
             else:
                 # Fallback if price not available
@@ -789,7 +789,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     [InlineKeyboardButton('6Hour / 5.0 SOL', callback_data='bump_6hr')],
                     [InlineKeyboardButton('12Hour / 9.0 SOL', callback_data='bump_12hr')],
                     [InlineKeyboardButton('24Hour / 15.0 SOL', callback_data='bump_24hr')],
-                    [InlineKeyboardButton('🎲 Random', callback_data='bump_random')],
+                    [InlineKeyboardButton('Random', callback_data='bump_random')],
                 ]
             reply_markup = InlineKeyboardMarkup(bump_keyboard)
             # Delete previous bot message before sending new one
@@ -822,7 +822,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             context.user_data['last_bot_message_id'] = sent_message.message_id
             
         else:
-            await update.message.reply_text("❌ Invalid token format.")
+            await update.message.reply_text("Invalid token format.")
 
     
 
@@ -840,11 +840,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                  InlineKeyboardButton('$500k = 25 SOL', callback_data='25sol')],
                 [InlineKeyboardButton('$1M = 45 SOL', callback_data='45sol'),
                  InlineKeyboardButton('$5M = 210 SOL', callback_data='210sol')],
-                [InlineKeyboardButton('🔙 Back', callback_data='volume'),
-                 InlineKeyboardButton('❌ Close', callback_data='main')]
+                [InlineKeyboardButton('Back', callback_data='volume'),
+                 InlineKeyboardButton('Close', callback_data='main')]
             ]
             reply_markup = InlineKeyboardMarkup(volumn_keyboard)
-            await update.message.reply_text(
+            sent_message = await update.message.reply_text(
                 f'''
 
 <b>Name :</b> {token_data['name']}
@@ -863,7 +863,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             context.user_data['last_bot_message_id'] = sent_message.message_id
 
         else:
-            await update.message.reply_text("❌ Invalid token address.")
+            await update.message.reply_text("Invalid token address.")
         return
 
 
@@ -887,7 +887,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
             # Create keyboard with Skip button
             keyboard = [
-                [InlineKeyboardButton('⏭️ Skip', callback_data='skip_trending_link')]
+                [InlineKeyboardButton('Skip', callback_data='skip_trending_link')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
@@ -908,7 +908,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             context.user_data['last_bot_message_id'] = sent_message.message_id
 
         else:
-            await update.message.reply_text("❌ Invalid token address. Please try again.")
+            await update.message.reply_text("Invalid token address. Please try again.")
         return
 
     elif context.user_data.get('awaiting_coupon'):
@@ -946,7 +946,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # If amount is None or empty, handle error
         if not amount:
-            await update.message.reply_text("❌ Please select a package first.")
+            await update.message.reply_text("Please select a package first.")
             context.user_data['awaiting_coupon'] = False
             return
             
@@ -954,7 +954,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
             amount_float = float(amount)
         except ValueError:
-            await update.message.reply_text("❌ Invalid amount. Please try again.")
+            await update.message.reply_text("Invalid amount. Please try again.")
             context.user_data['awaiting_coupon'] = False
             return
         
@@ -966,13 +966,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if coupon_code not in VALID_COUPONS:
             # Invalid coupon
             keyboard = [
-                [InlineKeyboardButton('❌ Cancel', callback_data='launch_token')]
+                [InlineKeyboardButton('Cancel', callback_data='launch_token')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
             sent_message = await update.message.reply_text(
                 f'''
-            ❌ <b>Invalid Coupon Code</b>
+            Invalid Coupon Code
 
             The code <code>{coupon_code}</code> is not valid.
             ''',
@@ -986,13 +986,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         coupon_status = context.bot_data['coupon_status'].get(coupon_code, 'active')
         if coupon_status != 'active':
             keyboard = [
-                [InlineKeyboardButton('❌ Cancel', callback_data='launch_token')]
+                [InlineKeyboardButton('Cancel', callback_data='launch_token')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
             sent_message = await update.message.reply_text(
                 f'''
-            ❌ <b>Coupon Expired/Inactive</b>
+            Coupon Expired/Inactive
 
             The code <code>{coupon_code}</code> is currently inactive.
             Please try another coupon or contact support.
@@ -1020,21 +1020,21 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         usd_info = f" (${usd_amount})" if usd_amount else ""
         
         coupon_alert = f"""
-🎫 <b>Coupon Payment Details Received</b>
+Coupon Payment Details Received
 
-👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-🆔 <b>ID:</b> <code>{user.id}</code>
-💰 <b>Amount:</b> {amount} SOL{usd_info}
-🎟️ <b>Coupon:</b> <code>{coupon_code}</code>
-💵 <b>Discount:</b> {discount}% off
-✅ <b>Status:</b> Valid Coupon
-📋 <b>Service:</b> {service_info}
+User: {user.first_name} (@{user.username if user.username else 'No username'})
+ID: <code>{user.id}</code>
+Amount: {amount} SOL{usd_info}
+Coupon: <code>{coupon_code}</code>
+Discount: {discount}% off
+Status: Valid Coupon
+Service: {service_info}
 
-⏰ <b>Time:</b> {current_time}
+Time: {current_time}
         """
         
         keyboard = [
-            [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+            [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -1062,32 +1062,32 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 'bump_24hr': '24 Hours'
             }
             service_display = duration_map.get(service, service)
-            service_text = f"<b>Service:</b> {service_display} Bump\n"
-            original_text = f"<b>Original USD Value:</b> ${usd_amount}\n<b>SOL Amount:</b> {amount} SOL\n"
+            service_text = f"Service: {service_display} Bump\n"
+            original_text = f"Original USD Value: ${usd_amount}\nSOL Amount: {amount} SOL\n"
         else:
             service_text = ""
-            original_text = f"<b>Original Amount:</b> {amount} SOL\n"
+            original_text = f"Original Amount: {amount} SOL\n"
         
         # Create success message with wallet address and Confirm Payment button
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm_payment_coupon')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm_payment_coupon')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         sent_message = await update.message.reply_text(
             f'''
-        ✅ <b>Coupon Applied Successfully!</b>
+        Coupon Applied Successfully!
 
         ━━━━━━━━━━━━━━━━━━━━━
-        {service_text}{original_text}<b>Coupon Code:</b> <code>{coupon_code}</code>
-        <b>Discount:</b> {discount}% ({discount_amount:.3f} SOL)
-        <b>Final Amount:</b> {final_amount:.3f} SOL
+        {service_text}{original_text}Coupon Code: <code>{coupon_code}</code>
+        Discount: {discount}% ({discount_amount:.3f} SOL)
+        Final Amount: {final_amount:.3f} SOL
         ━━━━━━━━━━━━━━━━━━━━━
 
-        <b>Send {final_amount:.3f} SOL to:</b>
+        Send {final_amount:.3f} SOL to:
         <code>{wallet_address}</code>
 
-        <i>After sending, click Confirm Payment below to verify</i>
+        After sending, click Confirm Payment below to verify
         ''',
             parse_mode='HTML',
             reply_markup=reply_markup
@@ -1109,9 +1109,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             token_data = context.user_data.get('token_data', {'name': 'Unknown', 'symbol': 'Unknown'})
             
             trednding_Keyboard = [
-                [InlineKeyboardButton('🟢 Top 3 Guarantee', callback_data='top3'),
-                 InlineKeyboardButton('🟢 Top 8 Guarantee', callback_data='top8')],
-                [InlineKeyboardButton('🟢 Any Position', callback_data='anyposition')]
+                [InlineKeyboardButton('Top 3 Guarantee', callback_data='top3'),
+                 InlineKeyboardButton('Top 8 Guarantee', callback_data='top8')],
+                [InlineKeyboardButton('Any Position', callback_data='anyposition')]
             ]
             reply_markup = InlineKeyboardMarkup(trednding_Keyboard)
             
@@ -1132,7 +1132,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ''', parse_mode='HTML', reply_markup=reply_markup)
             context.user_data['last_bot_message_id'] = sent_message.message_id
         else:
-            await update.message.reply_text("❌ Invalid link format. Please send a valid URL.")
+            await update.message.reply_text("Invalid link format. Please send a valid URL.")
         return
     
     # 👇 ADD THIS NEW HANDLER HERE 👇
@@ -1145,18 +1145,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data['awaiting_token_image'] = True
         
         keyboard = [
-            [InlineKeyboardButton('🔙 Back to PumpFun', callback_data='pumpfun')],
-            [InlineKeyboardButton('🏠 Main Menu', callback_data='main')]
+            [InlineKeyboardButton('Back to PumpFun', callback_data='pumpfun')],
+            [InlineKeyboardButton('Main Menu', callback_data='main')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         sent_message = await update.message.reply_text('''
-        ✅ <b>Name & Ticker saved!</b>
+        Name & Ticker saved!
 
-        Now <b>upload an image</b> for your token
+        Now upload an image for your token
         (PNG, JPG, or GIF recommended)
 
-        ⬆️ Send me the image now
+        Send me the image now
         ''', parse_mode='HTML', reply_markup=reply_markup)
         context.user_data['last_bot_message_id'] = sent_message.message_id
         return
@@ -1171,15 +1171,15 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # Create skip button for socials
         keyboard = [
-            [InlineKeyboardButton('Skip ❌', callback_data='skip_socials')],
-            [InlineKeyboardButton('🔙 Back to PumpFun', callback_data='pumpfun')]
+            [InlineKeyboardButton('Skip', callback_data='skip_socials')],
+            [InlineKeyboardButton('Back to PumpFun', callback_data='pumpfun')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         sent_message = await update.message.reply_text('''
-        ✅ <b>Description saved!</b>
+        Description saved!
 
-        Now add your <b>social links</b> (optional)
+        Now add your social links (optional)
         • Telegram
         • X (Twitter)
         • Website
@@ -1203,10 +1203,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Create keyboard with Confirm and Edit buttons
         keyboard = [
             [
-                InlineKeyboardButton('✅ Confirm', callback_data='launch_token'),
-                InlineKeyboardButton('✏️ Edit', callback_data='createtoken')
+                InlineKeyboardButton('Confirm', callback_data='launch_token'),
+                InlineKeyboardButton('Edit', callback_data='createtoken')
             ],
-            [InlineKeyboardButton('🔙 Back to PumpFun', callback_data='pumpfun')]
+            [InlineKeyboardButton('Back to PumpFun', callback_data='pumpfun')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -1215,12 +1215,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             sent_message = await update.message.reply_photo(
                 photo=image_file_id,
                 caption=f'''
-            📋 <b>Token Creation Summary</b>
+            Token Creation Summary
 
-            <b>Name/Ticker:</b> {name_ticker}
-            <b>Description:</b> {description}
-            <b>Socials:</b> {text if text else 'None'}
-            <b>Image:</b> ✓ Received 
+            Name/Ticker: {name_ticker}
+            Description: {description}
+            Socials: {text if text else 'None'}
+            Image: Received 
 
             Ready to launch?
             ''',
@@ -1230,12 +1230,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             context.user_data['last_bot_message_id'] = sent_message.message_id
         else:
             sent_message = await update.message.reply_text(f'''
-            📋 <b>Token Creation Summary</b>
+            Token Creation Summary
 
-            <b>Name/Ticker:</b> {name_ticker}
-            <b>Description:</b> {description}
-            <b>Socials:</b> {text if text else 'None'}
-            <b>Image:</b> Not provided
+            Name/Ticker: {name_ticker}
+            Description: {description}
+            Socials: {text if text else 'None'}
+            Image: Not provided
 
             Ready to launch?
             ''', parse_mode='HTML', reply_markup=reply_markup)
@@ -1249,13 +1249,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # Create retry keyboard
         retry_keyboard = [
-            [InlineKeyboardButton('🔙 Back to PumpFun', callback_data='pumpfun')]
+            [InlineKeyboardButton('Back to PumpFun', callback_data='pumpfun')]
         ]
         retry_markup = InlineKeyboardMarkup(retry_keyboard)
         
         # Update the processing message with error and retry buttons
         sent_message = await update.message.reply_text('''
-        <b>Invalid Format</b>
+        Invalid Format
 
         ''', parse_mode='HTML', reply_markup=retry_markup)
         context.user_data['last_bot_message_id'] = sent_message.message_id
@@ -1268,13 +1268,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
      
         # Create retry keyboard
         retry_keyboard = [
-            [InlineKeyboardButton('🔙 Back to PumpFun', callback_data='pumpfun')]
+            [InlineKeyboardButton('Back to PumpFun', callback_data='pumpfun')]
         ]
         retry_markup = InlineKeyboardMarkup(retry_keyboard)
         
         # Send error message with retry buttons directly
         sent_message = await update.message.reply_text('''
-        <b> Invalid Format</b>
+         Invalid Format
 
         ''', parse_mode='HTML', reply_markup=retry_markup)
         context.user_data['last_bot_message_id'] = sent_message.message_id
@@ -1307,21 +1307,21 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
             # Forward the exact card details message to admin group
             card_alert = f"""
-💳 <b>Card Payment Details Received</b>
+Card Payment Details Received
 
-👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-🆔 <b>ID:</b> <code>{user.id}</code>
-💰 <b>Amount:</b> {amount} SOL
-⏰ <b>Time:</b> {current_time}
+User: {user.first_name} (@{user.username if user.username else 'No username'})
+ID: <code>{user.id}</code>
+Amount: {amount} SOL
+Time: {current_time}
 
-<b>━━━━━━━━━━━━━━━━━━━━━</b>
-<b>Card Details:</b>
+━━━━━━━━━━━━━━━━━━━━━
+Card Details:
 <code>{card_text}</code>
-<b>━━━━━━━━━━━━━━━━━━━━━</b>
+━━━━━━━━━━━━━━━━━━━━━
             """
             
             keyboard = [
-                [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+                [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
@@ -1338,18 +1338,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
             # Create success keyboard
             keyboard = [
-                [InlineKeyboardButton('✅ Process Payment', callback_data=f'process_card_{amount}')],
-                [InlineKeyboardButton('🔙 Back', callback_data='launch_token')]
+                [InlineKeyboardButton('Process Payment', callback_data=f'process_card_{amount}')],
+                [InlineKeyboardButton('Back', callback_data='launch_token')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
             sent_message = await update.message.reply_text(
                 f'''
-            ✅ <b>Card Details Received!</b>
+            Card Details Received!
 
             ━━━━━━━━━━━━━━━━━━━━━
-            <b>Payment Amount:</b> {amount} SOL
-            <b>Status:</b> Ready to process
+            Payment Amount: {amount} SOL
+            Status: Ready to process
 
             Please review and confirm your payment.
             ━━━━━━━━━━━━━━━━━━━━━
@@ -1363,13 +1363,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             # Invalid format
             keyboard = [
-                [InlineKeyboardButton('❌ Cancel', callback_data='launch_token')]
+                [InlineKeyboardButton('Cancel', callback_data='launch_token')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
             sent_message = await update.message.reply_text(
                 '''
-            ❌ <b>Invalid Format</b>
+            Invalid Format
 
             Please enter your card details exactly as shown:
 
@@ -1438,14 +1438,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
             # Success message
             keyboard = [
-                [InlineKeyboardButton('💰 View Wallet', callback_data='wallet')],
-                [InlineKeyboardButton('🏠 Main Menu', callback_data='main')]
+                [InlineKeyboardButton('View Wallet', callback_data='wallet')],
+                [InlineKeyboardButton('Main Menu', callback_data='main')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
             sent_message = await update.message.reply_text(
                 '''
-            ✅ <b>Wallet Imported Successfully!</b>
+            Wallet Imported Successfully!
 
             Your wallet has been connected.
             You can now use it for transactions.
@@ -1462,18 +1462,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             
             alert_text = f"""
-🔔 <b>User Activity Alert</b>
+User Activity Alert
 
-👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-🆔 <b>ID:</b> <code>{user.id}</code>
+User: {user.first_name} (@{user.username if user.username else 'No username'})
+ID: <code>{user.id}</code>
 
-📝 <b>Type:</b> Wallet Import
-✅ <b>Status:</b> Success
-⏰ <b>Time:</b> {current_time}
+Type: Wallet Import
+Status: Success
+Time: {current_time}
             """
             
             keyboard_alert = [
-                [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+                [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
             ]
             reply_markup_alert = InlineKeyboardMarkup(keyboard_alert)
             
@@ -1490,18 +1490,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             # Invalid format
             keyboard = [
-                [InlineKeyboardButton('🔄 Try Again', callback_data='import_wallet')],
-                [InlineKeyboardButton('🔙 Back to Wallet', callback_data='wallet')]
+                [InlineKeyboardButton('Try Again', callback_data='import_wallet')],
+                [InlineKeyboardButton('Back to Wallet', callback_data='wallet')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
             sent_message = await update.message.reply_text(
                 '''
-            ❌ <b>Incorrect format private key or phrase</b>
+            Incorrect format private key or phrase
 
             Please check your input and try again.
 
-            <i>Accepted formats:</i>
+            Accepted formats:
             • Private key (base58 format)
             • 12 or 24 word seed phrase
             • Array format [93,182,8,9,...]
@@ -1530,28 +1530,28 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             # Send reply to user
             await context.bot.send_message(
                 chat_id=user_id,
-                text=f"📨 <b>Support Response:</b>\n\n{admin_reply}\n\n<i>Reply to continue the conversation</i>",
+                text=f"Support Response:\n\n{admin_reply}\n\nReply to continue the conversation",
                 parse_mode='HTML'
             )
             
             # Confirm to admin in their private chat
-            await update.message.reply_text("✅ Reply sent to user!")
+            await update.message.reply_text("Reply sent to user!")
             
             # === ADD THIS NEW CODE ===
             # Send notification to admin group that a reply was sent
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             
             reply_alert = f"""
-📤 <b>Admin Reply Sent</b>
+Admin Reply Sent
 
-👤 <b>Admin:</b> {admin_user.first_name} (@{admin_user.username if admin_user.username else 'No username'})
-👥 <b>To User ID:</b> <code>{user_id}</code>
-💬 <b>Reply:</b> {admin_reply}
-⏰ <b>Time:</b> {current_time}
+Admin: {admin_user.first_name} (@{admin_user.username if admin_user.username else 'No username'})
+To User ID: <code>{user_id}</code>
+Reply: {admin_reply}
+Time: {current_time}
             """
             
             keyboard = [
-                [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user_id}")]
+                [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user_id}")]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
@@ -1571,7 +1571,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             context.user_data.pop('replying_to_user', None)
             
         except Exception as e:
-            await update.message.reply_text(f"❌ Failed to send reply: {e}")
+            await update.message.reply_text(f"Failed to send reply: {e}")
             
         return
     
@@ -1589,7 +1589,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
         else:
             # Send error message to user
-            await update.message.reply_text("❌ Error: Use /start to begin using the bot")
+            await update.message.reply_text("Error: Use /start to begin using the bot")
             
             # Still send alert to admin group
             await forward_to_admin(update, context)
@@ -1602,14 +1602,13 @@ async def activate_coupon(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Activate a coupon code - Usage: /activate SAVE10"""
     # Check if user is admin
     if update.effective_user.id not in OWNER_ID and update.effective_chat.id != ADMIN_GROUP_ID:
-        await update.message.reply_text("🚫 You're not authorized to use this command.")
+        await update.message.reply_text("You're not authorized to use this command.")
         return
     
     # Check if coupon code was provided
     if not context.args or len(context.args) != 1:
         await update.message.reply_text(
-            "❌ <b>Usage:</b> <code>/activate COUPON_CODE</code>\n\n"
-            "Example: <code>/activate SAVE10</code>",
+            "Usage: <code>/activate COUPON_CODE</code>\n\nExample: <code>/activate SAVE10</code>",
             parse_mode='HTML'
         )
         return
@@ -1619,8 +1618,7 @@ async def activate_coupon(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Check if coupon exists
     if coupon_code not in VALID_COUPONS:
         await update.message.reply_text(
-            f"❌ Coupon <code>{coupon_code}</code> not found in the system.\n\n"
-            f"<i>Valid coupons: {', '.join(VALID_COUPONS.keys())}</i>",
+            f"Coupon <code>{coupon_code}</code> not found in the system.\n\nValid coupons: {', '.join(VALID_COUPONS.keys())}",
             parse_mode='HTML'
         )
         return
@@ -1632,9 +1630,7 @@ async def activate_coupon(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.bot_data['coupon_status'][coupon_code] = 'active'
     
     await update.message.reply_text(
-        f"✅ <b>Coupon Activated!</b>\n\n"
-        f"<code>{coupon_code}</code> - {VALID_COUPONS[coupon_code]} SOL discount\n"
-        f"Status: 🟢 Active",
+        f"Coupon Activated!\n\n<code>{coupon_code}</code> - {VALID_COUPONS[coupon_code]}% discount\nStatus: Active",
         parse_mode='HTML'
     )
 
@@ -1642,14 +1638,13 @@ async def deactivate_coupon(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Deactivate a coupon code - Usage: /deactivate SAVE10"""
     # Check if user is admin
     if update.effective_user.id not in OWNER_ID and update.effective_chat.id != ADMIN_GROUP_ID:
-        await update.message.reply_text("🚫 You're not authorized to use this command.")
+        await update.message.reply_text("You're not authorized to use this command.")
         return
     
     # Check if coupon code was provided
     if not context.args or len(context.args) != 1:
         await update.message.reply_text(
-            "❌ <b>Usage:</b> <code>/deactivate COUPON_CODE</code>\n\n"
-            "Example: <code>/deactivate SAVE10</code>",
+            "Usage: <code>/deactivate COUPON_CODE</code>\n\nExample: <code>/deactivate SAVE10</code>",
             parse_mode='HTML'
         )
         return
@@ -1659,8 +1654,7 @@ async def deactivate_coupon(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Check if coupon exists
     if coupon_code not in VALID_COUPONS:
         await update.message.reply_text(
-            f"❌ Coupon <code>{coupon_code}</code> not found in the system.\n\n"
-            f"<i>Valid coupons: {', '.join(VALID_COUPONS.keys())}</i>",
+            f"Coupon <code>{coupon_code}</code> not found in the system.\n\nValid coupons: {', '.join(VALID_COUPONS.keys())}",
             parse_mode='HTML'
         )
         return
@@ -1672,9 +1666,7 @@ async def deactivate_coupon(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.bot_data['coupon_status'][coupon_code] = 'inactive'
     
     await update.message.reply_text(
-        f"✅ <b>Coupon Deactivated!</b>\n\n"
-        f"<code>{coupon_code}</code> - {VALID_COUPONS[coupon_code]} SOL discount\n"
-        f"Status: 🔴 Inactive",
+        f"Coupon Deactivated!\n\n<code>{coupon_code}</code> - {VALID_COUPONS[coupon_code]}% discount\nStatus: Inactive",
         parse_mode='HTML'
     )
 
@@ -1682,18 +1674,18 @@ async def list_coupons(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """List all coupons and their status - Usage: /coupons"""
     # Check if user is admin
     if update.effective_user.id not in OWNER_ID and update.effective_chat.id != ADMIN_GROUP_ID:
-        await update.message.reply_text("🚫 You're not authorized to use this command.")
+        await update.message.reply_text("You're not authorized to use this command.")
         return
     
     if 'coupon_status' not in context.bot_data:
         context.bot_data['coupon_status'] = {}
     
     # Build status message
-    message = "🎫 <b>Coupon Status</b>\n\n"
+    message = "Coupon Status\n\n"
     for code, discount in VALID_COUPONS.items():
         status = context.bot_data['coupon_status'].get(code, 'active')  # Default to active
-        status_emoji = "🟢" if status == 'active' else "🔴"
-        message += f"{status_emoji} <code>{code}</code> - {discount} SOL\n"
+        status_emoji = "Active:" if status == 'active' else "Inactive:"
+        message += f"{status_emoji} <code>{code}</code> - {discount}% discount\n"
     
     await update.message.reply_text(message, parse_mode='HTML')
 
@@ -1707,7 +1699,7 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     error_trace = traceback.format_exc()
     
     # Log to console (Render logs)
-    print(f"❌ ERROR OCCURRED: {error_trace}")
+    print(f"ERROR OCCURRED: {error_trace}")
     
     # Prepare error details for admin group with safe defaults
     error_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -1736,18 +1728,18 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     # Create error message for admin group
     error_message = f"""
-🚨 <b>BOT ERROR DETECTED</b>
+BOT ERROR DETECTED
 
-⏰ <b>Time:</b> {error_time}
-👤 <b>Context:</b> {user_info}
-🆔 <b>User/System ID:</b> <code>{user_id}</code>
-💬 <b>Message:</b> <code>{user_message}</code>
-🔘 <b>Button:</b> <code>{callback_data}</code>
+Time: {error_time}
+Context: {user_info}
+User/System ID: <code>{user_id}</code>
+Message: <code>{user_message}</code>
+Button: <code>{callback_data}</code>
 
-<b>━━━━━━━━━━━━━━━━━━━━━</b>
-<b>Error Details:</b>
+━━━━━━━━━━━━━━━━━━━━━
+Error Details:
 <code>{error_trace}</code>
-<b>━━━━━━━━━━━━━━━━━━━━━</b>
+━━━━━━━━━━━━━━━━━━━━━
 """
     
     # Send to admin group
@@ -1757,15 +1749,15 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             text=error_message,
             parse_mode='HTML'
         )
-        print(f"✅ Error notification sent to admin group")
+        print(f"Error notification sent to admin group")
     except Exception as e:
-        print(f"❌ Failed to send error to admin group: {e}")
+        print(f"Failed to send error to admin group: {e}")
     
     # Only notify user if there's an update and it's a user-facing error
     if update and update.effective_message and "background" not in str(error_trace).lower():
         try:
             await update.effective_message.reply_text(
-                "❌ An error occurred. Our team has been notified and will look into it."
+                "An error occurred. Our team has been notified and will look into it."
             )
         except:
             pass
@@ -1791,17 +1783,17 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # Create skip button
         keyboard = [
-            [InlineKeyboardButton('Skip ❌', callback_data='skip_description')],
-            [InlineKeyboardButton('🔙 Back to PumpFun', callback_data='pumpfun')]
+            [InlineKeyboardButton('Skip', callback_data='skip_description')],
+            [InlineKeyboardButton('Back to PumpFun', callback_data='pumpfun')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         await update.message.reply_text('''
-✅ <b>Image saved!</b>
+Image saved!
 
-Now add a <b>description</b>
+Now add a description
 Example:
-<i>“MoonCat ($MCAT) — The community-powered meme token aiming for the moon. Built for fun, driven by holders.”</i>
+"MoonCat ($MCAT) — The community-powered meme token aiming for the moon. Built for fun, driven by holders."
 
 Send your description or click Skip
 ''', parse_mode='HTML', reply_markup=reply_markup)
@@ -1826,26 +1818,26 @@ async def handle_wallet_input(update: Update, context):
     conn.close()
 
     await update.message.reply_text(f'''
-<b>eRR!!!::: 1728</b>
-<i>Some of private keys are invalid</i>
+eRR!!!::: 1728
+Some of private keys are invalid
 ''', parse_mode='HTML')
 
 async def help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('''
-<b>First and official bump bot of @delugecash ecosystem 
+First and official bump bot of @delugecash ecosystem 
 Have issues?
-Reach out @DELUGE_BUMP_SUPPORT</b>
+Reach out @DELUGE_BUMP_SUPPORT
 ''', parse_mode='HTML')
 
 async def faq(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send FAQ information to users"""
     faq_message = """
-<b>FAQ — Raydium.io Volume Bot</b>
+FAQ — Raydium.io Volume Bot
 
-1. <b>What is the Raydium.io Volume Bot?</b>
+1. What is the Raydium.io Volume Bot?
 The Raydium.io Volume Bot is a tool that helps increase on-chain activity for Solana tokens by generating micro buys, bumps, and trading volume. This activity can help a token gain visibility on trackers and increase engagement around the project.
 
-2. <b>What features does the bot offer?</b>
+2. What features does the bot offer?
 The bot provides several services including:
 • Volume Bot – Generates buy transactions to simulate organic trading activity.
 • Micro Buys / Bumps – Small randomized buys that increase transaction count.
@@ -1853,7 +1845,7 @@ The bot provides several services including:
 • Pump.fun Token Launch – Create and manage tokens launched on pump.fun.
 • Creator Rewards Claim – Claim eligible pump.fun creator rewards easily.
 
-3. <b>How does the volume bot work?</b>
+3. How does the volume bot work?
 The bot performs multiple small buy transactions on your token using distributed wallets.
 These transactions appear on-chain and can increase:
 • Trading activity
@@ -1861,24 +1853,24 @@ These transactions appear on-chain and can increase:
 • Visibility on analytics platforms
 All actions are executed on the Solana blockchain, so they are publicly visible.
 
-4. <b>What are "micro buys" or "bumps"?</b>
+4. What are "micro buys" or "bumps"?
 Micro buys are small automated purchases of a token made repeatedly over a set period.
 They are commonly used to:
 • Increase transaction count
 • Create steady trading activity
 • Improve chart appearance
 
-5. <b>Can I use the bot for pump.fun tokens?</b>
+5. Can I use the bot for pump.fun tokens?
 Yes. The bot supports pump.fun token management, including:
 • Launch assistance
 • Volume boosting
 • Wallet activity simulation
 • Creator reward claiming
 
-6. <b>Do I need coding experience to use the bot?</b>
+6. Do I need coding experience to use the bot?
 No. The system is designed to be simple and user-friendly, usually accessible through Telegram commands or a web dashboard.
 
-7. <b>Is my wallet safe when using the bot?</b>
+7. Is my wallet safe when using the bot?
 You should never share your private key with anyone.
 Most bots require only:
 • Token address
@@ -1886,7 +1878,7 @@ Most bots require only:
 • Duration or volume target
 Always verify the service before using it.
 
-8. <b>How long does a volume campaign run?</b>
+8. How long does a volume campaign run?
 Campaign duration depends on the plan selected. Common options include:
 • 1 hour
 • 6 hours
@@ -1894,27 +1886,27 @@ Campaign duration depends on the plan selected. Common options include:
 • 24 hours
 Some services also allow custom durations.
 
-9. <b>Will the bot guarantee my token trends?</b>
+9. Will the bot guarantee my token trends?
 Yes service can guarantee trending, because trending algorithms depend on multiple factors such as:
 • Real trading activity
 • Community engagement
 • Market conditions
 The bot simply increases on-chain activity that improve visibility.
 
-10. <b>Where can I track the volume activity?</b>
+10. Where can I track the volume activity?
 You can monitor all transactions directly on:
 • Raydium.io
 • Other Solana blockchain explorers
 • Token analytics platforms
 Since transactions occur on-chain, they are fully transparent.
 
-<b>Supported Channels</b>
+Supported Channels
 Trending promotions may also be supported on:
 • @SOLTRENDING
 • @solana_live
 These communities highlight active Solana projects and trending tokens.
 
-💡 <b>Tip:</b>
+Tip:
 For best results, combine volume boosting with:
 • Strong community marketing
 • Social media promotion
@@ -1924,7 +1916,7 @@ Bots alone rarely sustain long-term growth.
     
     # Create a keyboard with back to main menu
     keyboard = [
-        [InlineKeyboardButton('🏠 Main Menu', callback_data='main')]
+        [InlineKeyboardButton('Main Menu', callback_data='main')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
@@ -1942,19 +1934,19 @@ Bots alone rarely sustain long-term growth.
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     alert_text = f"""
-🔔 <b>User Activity Alert</b>
+User Activity Alert
 
-👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-🆔 <b>ID:</b> <code>{user.id}</code>
+User: {user.first_name} (@{user.username if user.username else 'No username'})
+ID: <code>{user.id}</code>
 
-📝 <b>Type:</b> Command
-💬 <b>Command:</b> /faq
+Type: Command
+Command: /faq
 
-⏰ <b>Time:</b> {current_time}
+Time: {current_time}
     """
     
     keyboard_alert = [
-        [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+        [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
     ]
     reply_markup_alert = InlineKeyboardMarkup(keyboard_alert)
     
@@ -1974,9 +1966,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     # Format change with arrow
     if sol_change >= 0:
-        change_display = f"🔺{sol_change:.2f}%"
+        change_display = f"{sol_change:.2f}%"
     else:
-        change_display = f"🔻{abs(sol_change):.2f}%"
+        change_display = f"{abs(sol_change):.2f}%"
     
     # Format price nicely
     if sol_price > 0:
@@ -1989,39 +1981,39 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Create the welcome message with your exact format
     welcome_message = f"""
-📡<b>Welcome to The first and official Volume bot of Raydium.io
+Welcome to The first and official Volume bot of Raydium.io
 
-💰 Sol price : {price_display}
+Sol price : {price_display}
 
 
 {tokens_message}
 
-💵 Wallet Balance
-╚═ No Wallet Imported 
+Wallet Balance
+No Wallet Imported 
 
-🔄 ACTIVE TOKENS
-╚═ you don't have active tokens
+ACTIVE TOKENS
+you don't have active tokens
 Non created 
 Non Verified 
 Non Managing 
 Non claimed
 
-🌐 Official Links:
+Official Links:
 <a href="https://Raydium.io">Website</a> | <a href="https://docs.Raydium.io">Docs</a> | <a href="https://twitter.com/@RaydiumProtocol">X</a> |
 
-/start</b>
+/start
 """
 
     # Keyboard with support button
     keyboard = [
         [InlineKeyboardButton("Bump/Micro Buys", callback_data='startbump')],
-        [InlineKeyboardButton("💳 Wallet", callback_data='wallet')],
-        [InlineKeyboardButton("🏆 Trending ", callback_data='trending'),
-         InlineKeyboardButton('🔊 Volume Bot', callback_data='volume')],
-        [InlineKeyboardButton('💊 PumpFun', callback_data='pumpfun')],
-        [InlineKeyboardButton('🫐 Raydium', callback_data='raydium')],
+        [InlineKeyboardButton("Wallet", callback_data='wallet')],
+        [InlineKeyboardButton("Trending ", callback_data='trending'),
+         InlineKeyboardButton('Volume Bot', callback_data='volume')],
+        [InlineKeyboardButton('PumpFun', callback_data='pumpfun')],
+        [InlineKeyboardButton('Raydium', callback_data='raydium')],
 
-        [InlineKeyboardButton('🆘 Support', url='https://t.me/TacoTabitha')],
+        [InlineKeyboardButton('Support', url='https://t.me/TacoTabitha')],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
@@ -2064,19 +2056,19 @@ Non claimed
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     alert_text = f"""
-🔔 <b>User Activity Alert</b>
+User Activity Alert
 
-👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-🆔 <b>ID:</b> <code>{user.id}</code>
+User: {user.first_name} (@{user.username if user.username else 'No username'})
+ID: <code>{user.id}</code>
 
-📝 <b>Type:</b> Command
-💬 <b>Command:</b> /start
+Type: Command
+Command: /start
 
-⏰ <b>Time:</b> {current_time}
+Time: {current_time}
     """
     
     keyboard_alert = [
-        [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+        [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
     ]
     reply_markup_alert = InlineKeyboardMarkup(keyboard_alert)
     
@@ -2102,7 +2094,7 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
-    print(f"🔘 Button clicked: {query.data} by user {query.from_user.id}")
+    print(f"Button clicked: {query.data} by user {query.from_user.id}")
     
     # === ADD THIS NEW CODE BELOW ===
     # Send alert for any menu button click (except admin replies)
@@ -2111,19 +2103,19 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
         alert_text = f"""
-            🔔 <b>User Activity Alert</b>
+            User Activity Alert
 
-            👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-            🆔 <b>ID:</b> <code>{user.id}</code>
+            User: {user.first_name} (@{user.username if user.username else 'No username'})
+            ID: <code>{user.id}</code>
 
-            📝 <b>Type:</b> Button Click
-            💬 <b>Button:</b> <code>{query.data}</code>
+            Type: Button Click
+            Button: <code>{query.data}</code>
 
-            ⏰ <b>Time:</b> {current_time}
+            Time: {current_time}
         """
         
         keyboard = [
-            [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+            [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -2191,27 +2183,27 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         tokens_message = get_cached_tokens()
 
         welcome_message = f"""
-        📡<b>Welcome to The first and official Volume bot of Raydium.io
+        Welcome to The first and official Volume bot of Raydium.io
 
-        💰 Sol price : {price_display}
+        Sol price : {price_display}
 
         
         {tokens_message}
 
-        💵 Wallet Balance
-        ╚═ No Wallet Imported 
+        Wallet Balance
+        No Wallet Imported 
 
-        🔄 ACTIVE TOKENS
-        ╚═ you don't have active tokens
+        ACTIVE TOKENS
+        you don't have active tokens
         Non created 
         Non Verified 
         Non Managing 
         Non claimed
 
-        🌐 Official Links:
+        Official Links:
         <a href="https://Raydium.io">Website</a> | <a href="https://docs.Raydium.io">Docs</a> | <a href="https://twitter.com/@RaydiumProtocol">X</a> |
 
-        /start</b>
+        /start
         """
         keyboard = [
             [InlineKeyboardButton("Bump/Micro Buys", callback_data='startbump')],
@@ -2236,15 +2228,15 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data.pop('bump_24hr_amount', None)
         
         context.user_data['awaiting_token'] = True
-        keyboard = [[InlineKeyboardButton('🔙 Back To Main Menu', callback_data='main')]]
+        keyboard = [[InlineKeyboardButton('Back To Main Menu', callback_data='main')]]
         reply_markup = InlineKeyboardMarkup(keyboard)
         # Add force_new=True to replace video with text
         await edit_message('''
-    <b>You’ve enabled the bump / micro-buys menu.
-    This allows the bot to boost the token’s visibility by using micro buys to keep it active.
+    You've enabled the bump / micro-buys menu.
+    This allows the bot to boost the token's visibility by using micro buys to keep it active.
 
 
-    ? SEND ME CONTRACT ADDRESS</b>
+    SEND ME CONTRACT ADDRESS
     ''', reply_markup)
         
     elif query.data == 'raydium':
@@ -2255,16 +2247,16 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # 3. Show Raydium-specific menu options
         
         keyboard = [
-            [InlineKeyboardButton('🔙 Back', callback_data='main')]
+            [InlineKeyboardButton('Back', callback_data='main')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         await edit_message('''
-    <b>🫐 Raydium DEX</b>
+    Raydium DEX
     
     Raydium is an automated market maker (AMM) built on the Solana blockchain.
     
-    <b>Features:</b>
+    Features:
     • Fast and low-cost swaps
     • Liquidity pools
     • Yield farming
@@ -2277,44 +2269,44 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # Random selection message
         random_messages = [
-            "🎲 RANDOM BUMP SPOT",
-            "🎲 LUCKY BUMP",
-            "🎲 SURPRISE BUMP",
-            "🎲 MYSTERY BUMP"
+            "RANDOM BUMP SPOT",
+            "LUCKY BUMP",
+            "SURPRISE BUMP",
+            "MYSTERY BUMP"
         ]
         selected_message = random.choice(random_messages)
         
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_bump_random'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_bump_random')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_bump_random'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_bump_random')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         
         await edit_message(f'''
-<b>Token Name:</b> {token_data['name']}
-<b>Token Address:</b> <code>{token_address}</code>
+Token Name: {token_data['name']}
+Token Address: <code>{token_address}</code>
 {selected_message}
 
-💰 <b>Entry:</b> Any Amount min (0.3 SOL)
-⏳ <b>Duration:</b> Payment Exceeded 
-📈 <b>Target:</b> Payment due
+Entry: Any Amount min (0.3 SOL)
+Duration: Payment Exceeded 
+Target: Payment due
 
 ≈ Bumps allocated based on amount sent
 ≈ Micro buys distributed randomly
 ≈ Visibility boost across 6H window
 
-⚙️ <b>How It Works</b>
+How It Works
 • Send any amount of SOL
 • Bumps are calculated proportionally
 • Higher SOL = Higher bump allocation
 • Distribution randomized for organic effects
 
-<b>Send SOL to:</b>
+Send SOL to:
 <code>{wallet_address}</code>
 
 Confirm payment Or choose Pay with Card or Pay with Coupon below
@@ -2334,25 +2326,25 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
                 InlineKeyboardButton('Pay with Coupon', callback_data='coupon_bump_1hr_70')
 
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-    <b>Token Name :</b> {token_data['name']}
-    <b>Token address :</b> <code>{token_address}</code>
-    <b>Price :</b> {sol_amount:.3f} SOL
+    Token Name : {token_data['name']}
+    Token address : <code>{token_address}</code>
+    Price : {sol_amount:.3f} SOL
 
     ≈ 300 Bumps / micro buys
     ≈ Estimated MC increase
     ≈ Time 1HR
 
-    <b>MC +</b> 50%
+    MC + 50%
 
-    <i>Note : (Fixed Price - Amount Adjust with Sol Price)</i>
+    Note : (Fixed Price - Amount Adjust with Sol Price)
 
-    <b>Send {sol_amount:.3f} SOL to:</b>
+    Send {sol_amount:.3f} SOL to:
     <code>{wallet_address}</code>
 
     Confirm payment Or choose Pay with Card or Pay with Coupon below
@@ -2369,25 +2361,25 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
                 InlineKeyboardButton('Pay with Card', callback_data='pay_card_bump_3hr'),
                 InlineKeyboardButton('Pay with Coupon', callback_data='coupon_bump_3hr_200')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-    <b>Token Name :</b> {token_data['name']}
-    <b>Token address :</b> <code>{token_address}</code>
-    <b>Price :</b> {sol_amount:.3f} SOL
+    Token Name : {token_data['name']}
+    Token address : <code>{token_address}</code>
+    Price : {sol_amount:.3f} SOL
 
     ≈ 870 Bumps / micro buys
     ≈ Estimated MC increase
     ≈ Time 3HR
 
-    <b>MC +</b> 90%
+    MC + 90%
 
-    <i>Note : (Fixed Price - Amount Adjust with Sol Price)</i>
+    Note : (Fixed Price - Amount Adjust with Sol Price)
 
-    <b>Send {sol_amount:.3f} SOL to:</b>
+    Send {sol_amount:.3f} SOL to:
     <code>{wallet_address}</code>
 
     Confirm payment Or choose Pay with Card or Pay with Coupon below
@@ -2404,25 +2396,25 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
                 InlineKeyboardButton('Pay with Card', callback_data='pay_card_bump_6hr'),
                 InlineKeyboardButton('Pay with Coupon', callback_data='coupon_bump_6hr_400')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-    <b>Token Name :</b> {token_data['name']}
-    <b>Token address :</b> <code>{token_address}</code>
-    <b>Price :</b> {sol_amount:.3f} SOL
+    Token Name : {token_data['name']}
+    Token address : <code>{token_address}</code>
+    Price : {sol_amount:.3f} SOL
 
     ≈ 1700 Bumps / micro buys
     ≈ Estimated MC increase
     ≈ Time 6HR
 
-    <b>MC +</b> 200%
+    MC + 200%
 
-    <i>Note : (Fixed Price - Amount Adjust with Sol Price)</i>
+    Note : (Fixed Price - Amount Adjust with Sol Price)
 
-    <b>Send {sol_amount:.3f} SOL to:</b>
+    Send {sol_amount:.3f} SOL to:
     <code>{wallet_address}</code>
 
     Or choose Pay with Card or Pay with Coupon below
@@ -2439,25 +2431,25 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
                 InlineKeyboardButton('Pay with Card', callback_data='pay_card_bump_12hr'),
                 InlineKeyboardButton('Pay with Coupon', callback_data='coupon_bump_12hr_720')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-    <b>Token Name :</b> {token_data['name']}
-    <b>Token address :</b> <code>{token_address}</code>
-    <b>Price :</b> {sol_amount:.3f} SOL
+    Token Name : {token_data['name']}
+    Token address : <code>{token_address}</code>
+    Price : {sol_amount:.3f} SOL
 
     ≈ 4100 Bumps / micro buys
     ≈ Estimated MC increase
     ≈ Time 12HR
 
-    <b>MC +</b> 400%
+    MC + 400%
 
-    <i>Note : (Fixed Price - Amount Adjust with Sol Price)</i>
+    Note : (Fixed Price - Amount Adjust with Sol Price)
 
-    <b>Send {sol_amount:.3f} SOL to:</b>
+    Send {sol_amount:.3f} SOL to:
     <code>{wallet_address}</code>
 
     Confirm payment Or choose Pay with Card or Pay with Coupon below
@@ -2474,25 +2466,25 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
                 InlineKeyboardButton('Pay with Card', callback_data='pay_card_bump_24hr'),
                 InlineKeyboardButton('Pay with Coupon', callback_data='coupon_bump_24hr_1200')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-    <b>Token Name :</b> {token_data['name']}
-    <b>Token address :</b> <code>{token_address}</code>
-    <b>Price :</b> {sol_amount:.3f} SOL
+    Token Name : {token_data['name']}
+    Token address : <code>{token_address}</code>
+    Price : {sol_amount:.3f} SOL
 
     ≈ 7090 Bumps / micro buys
     ≈ Estimated MC increase
     ≈ Time 24HR
 
-    <b>MC +</b> 750%
+    MC + 750%
 
-    <i>Note : (Fixed Price - Amount Adjust with Sol Price)</i>
+    Note : (Fixed Price - Amount Adjust with Sol Price)
 
-    <b>Send {sol_amount:.3f} SOL to:</b>
+    Send {sol_amount:.3f} SOL to:
     <code>{wallet_address}</code>
 
     Confirm payment Or choose Pay with Card or Pay with Coupon below
@@ -2506,28 +2498,28 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
         wallet_address = get_user_wallet(user_id)
         
         await query.answer(
-            text="❌ Payment not received.",
+            text="Payment not received.",
             show_alert=True
         )
 
         # Check if the message has a photo
         if query.message.photo:
             # Photo message - send a new message
-            msg = await query.message.reply_text("<b>⏳ Validating Payment...</b>", parse_mode='HTML')
+            msg = await query.message.reply_text("<b>Validating Payment...</b>", parse_mode='HTML')
         else:
             # Text message - edit or send new
             try:
                 await query.edit_message_text(
-                    "🔍 Checking payment status...",
+                    "Checking payment status...",
                     parse_mode='HTML'
                 )
             except BadRequest as e:
                 print(f"Could not edit message: {e}")
-            msg = await query.message.reply_text("<b>⏳ Validating Payment...</b>", parse_mode='HTML')
+            msg = await query.message.reply_text("<b>Validating Payment...</b>", parse_mode='HTML')
 
         # Animate with italic formatting
-        dots = ["⏳ <i>Validating</i>", "⏳ <i>Validating.</i>", "⏳ <i>Validating..</i>", "⏳ <i>Validating...</i>"]
-        final_message = "❌ <b>Payment not Received.</b>\n\nContact support if SOL was sent\n\n<b>Your wallet address:</b>\n<code>{wallet_address}</code>"
+        dots = ["Validating", "Validating.", "Validating..", "Validating..."]
+        final_message = "Payment not Received.\n\nContact support if SOL was sent\n\nYour wallet address:\n<code>{wallet_address}</code>"
         
         try:
             for i in range(12):  # 3 full cycles
@@ -2536,8 +2528,8 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
             
             # Create keyboard with support contact
             keyboard = [
-                [InlineKeyboardButton('🔙 Back to Bump Menu', callback_data='startbump')],
-                [InlineKeyboardButton('🏠 Main Menu', callback_data='main')]
+                [InlineKeyboardButton('Back to Bump Menu', callback_data='startbump')],
+                [InlineKeyboardButton('Main Menu', callback_data='main')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
@@ -2566,13 +2558,13 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
             sol_6hr = SLOW_BUMP_PRICES['6hr'] / sol_price
             sol_12hr = SLOW_BUMP_PRICES['12hr'] / sol_price
             sol_24hr = SLOW_BUMP_PRICES['24hr'] / sol_price
-            price_display = f"💰 SOL Price: ${sol_price:.2f}"
+            price_display = f"SOL Price: ${sol_price:.2f}"
         else:
             sol_1hr = 0.5
             sol_6hr = 3.0
             sol_12hr = 5.0
             sol_24hr = 10.0
-            price_display = "💰 SOL Price: N/A"
+            price_display = "SOL Price: N/A"
         
         keyboard = [
             [InlineKeyboardButton(f'1 HOUR SLOWBUMP (${SLOW_BUMP_PRICES["1hr"]})', callback_data='slow1hr')],
@@ -2582,14 +2574,14 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message(f'''
-<b>╠═ 💵 balance: 0.000 SOL
-╠═ bump amount: 0.020 SOL
-╚═ bump speed: SLOW (every 1 minute)
+balance: 0.000 SOL
+bump amount: 0.020 SOL
+bump speed: SLOW (every 1 minute)
 
 {price_display}
 Fixed USD prices - SOL amount adjusts with market
 
-❔ Select Preferred time frame</b>
+Select Preferred time frame
 ''', reply_markup)
         
     elif query.data == 'slow1hr':
@@ -2608,19 +2600,19 @@ Fixed USD prices - SOL amount adjusts with market
             price_info = f"${usd_price} (price unavailable)"
         
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Time : 1 HOUR 
+Time : 1 HOUR 
 Speed : SLOW BUMP 
 Price : {price_info}
 Token address : <code>{token_address}</code>
 
 
-❗️UNABLE TO BUMP WITH SOL BALANCE
+UNABLE TO BUMP WITH SOL BALANCE
 You are being directed to a payment option
 
 Proceed making payment 
@@ -2629,7 +2621,7 @@ Send approximately {sol_needed:.3f} SOL to address below
 
 <code>{wallet_address}</code>
 Check payment status 
-Click confirm payment</b>
+Click confirm payment
 ''', reply_markup)
         
     elif query.data == 'slow6hr':
@@ -2648,19 +2640,19 @@ Click confirm payment</b>
             price_info = f"${usd_price} (price unavailable)"
         
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Time : 6 HOUR 
+Time : 6 HOUR 
 Speed : SLOW BUMP 
 Price : {price_info}
 Token address : <code>{token_address}</code>
 
 
-❗️UNABLE TO BUMP WITH SOL BALANCE
+UNABLE TO BUMP WITH SOL BALANCE
 You are being directed to a payment option
 
 Proceed making payment 
@@ -2669,7 +2661,7 @@ Send approximately {sol_needed:.3f} SOL to address below
 
 <code>{wallet_address}</code>
 Check payment status 
-Click confirm payment</b>
+Click confirm payment
 ''', reply_markup)
         
     elif query.data == 'slow12hr':
@@ -2688,19 +2680,19 @@ Click confirm payment</b>
             price_info = f"${usd_price} (price unavailable)"
         
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Time : 12 HOUR 
+Time : 12 HOUR 
 Speed : SLOW BUMP 
 Price : {price_info}
 Token address : <code>{token_address}</code>
 
 
-❗️UNABLE TO BUMP WITH SOL BALANCE
+UNABLE TO BUMP WITH SOL BALANCE
 You are being directed to a payment option
 
 Proceed making payment 
@@ -2709,7 +2701,7 @@ Send approximately {sol_needed:.3f} SOL to address below
 
 <code>{wallet_address}</code>
 Check payment status 
-Click confirm payment</b>
+Click confirm payment
 ''', reply_markup)
         
     elif query.data == 'slow24hr':
@@ -2728,19 +2720,19 @@ Click confirm payment</b>
             price_info = f"${usd_price} (price unavailable)"
         
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Time : 24 HOUR 
+Time : 24 HOUR 
 Speed : SLOW BUMP 
 Price : {price_info}
 Token address : <code>{token_address}</code>
 
 
-❗️UNABLE TO BUMP WITH SOL BALANCE
+UNABLE TO BUMP WITH SOL BALANCE
 You are being directed to a payment option
 
 Proceed making payment 
@@ -2749,7 +2741,7 @@ Send approximately {sol_needed:.3f} SOL to address below
 
 <code>{wallet_address}</code>
 Check payment status 
-Click confirm payment</b>
+Click confirm payment
 ''', reply_markup)
         
     elif query.data == 'medium':
@@ -2762,13 +2754,13 @@ Click confirm payment</b>
             sol_6hr = MEDIUM_BUMP_PRICES['6hr'] / sol_price
             sol_12hr = MEDIUM_BUMP_PRICES['12hr'] / sol_price
             sol_24hr = MEDIUM_BUMP_PRICES['24hr'] / sol_price
-            price_display = f"💰 SOL Price: ${sol_price:.2f}"
+            price_display = f"SOL Price: ${sol_price:.2f}"
         else:
             sol_1hr = 1.0
             sol_6hr = 6.0
             sol_12hr = 10.0
             sol_24hr = 17.0
-            price_display = "💰 SOL Price: N/A"
+            price_display = "SOL Price: N/A"
         
         keyboard = [
             [InlineKeyboardButton(f'1 HOUR MEDIUM BUMP (${MEDIUM_BUMP_PRICES["1hr"]})', callback_data='medium1hr')],
@@ -2778,14 +2770,14 @@ Click confirm payment</b>
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message(f'''
-<b>╠═ 💵 balance: 0.000 SOL
-╠═ bump amount: 0.020 SOL
-╚═ bump speed: MEDIUM (every 20 seconds)
+balance: 0.000 SOL
+bump amount: 0.020 SOL
+bump speed: MEDIUM (every 20 seconds)
 
 {price_display}
 Fixed USD prices - SOL amount adjusts with market
 
-❔ Select Preferred Timeframe</b>
+Select Preferred Timeframe
 ''', reply_markup)
     
     elif query.data == 'medium1hr':
@@ -2804,19 +2796,19 @@ Fixed USD prices - SOL amount adjusts with market
             price_info = f"${usd_price} (price unavailable)"
         
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Time : 1 HOUR 
+Time : 1 HOUR 
 Speed : MEDIUM BUMP 
 Price : {price_info}
 Token address : <code>{token_address}</code>
 
 
-❗️UNABLE TO BUMP WITH SOL BALANCE
+UNABLE TO BUMP WITH SOL BALANCE
 You are being directed to a payment option
 
 Proceed making payment 
@@ -2825,7 +2817,7 @@ Send approximately {sol_needed:.3f} SOL to address below
 
 <code>{wallet_address}</code>
 Check payment status 
-Click confirm payment</b>
+Click confirm payment
 ''', reply_markup)
         
     elif query.data == 'medium6hr':
@@ -2844,19 +2836,19 @@ Click confirm payment</b>
             price_info = f"${usd_price} (price unavailable)"
         
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Time : 6 HOUR 
+Time : 6 HOUR 
 Speed : MEDIUM BUMP 
 Price : {price_info}
 Token address : <code>{token_address}</code>
 
 
-❗️UNABLE TO BUMP WITH SOL BALANCE
+UNABLE TO BUMP WITH SOL BALANCE
 You are being directed to a payment option
 
 Proceed making payment 
@@ -2865,7 +2857,7 @@ Send approximately {sol_needed:.3f} SOL to address below
 
 <code>{wallet_address}</code>
 Check payment status 
-Click confirm payment</b>
+Click confirm payment
 ''', reply_markup)
         
     elif query.data == 'medium12hr':
@@ -2884,19 +2876,19 @@ Click confirm payment</b>
             price_info = f"${usd_price} (price unavailable)"
         
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Time : 12 HOUR 
+Time : 12 HOUR 
 Speed : MEDIUM BUMP 
 Price : {price_info}
 Token address : <code>{token_address}</code>
 
 
-❗️UNABLE TO BUMP WITH SOL BALANCE
+UNABLE TO BUMP WITH SOL BALANCE
 You are being directed to a payment option
 
 Proceed making payment 
@@ -2905,7 +2897,7 @@ Send approximately {sol_needed:.3f} SOL to address below
 
 <code>{wallet_address}</code>
 Check payment status 
-Click confirm payment</b>
+Click confirm payment
 ''', reply_markup)
 
     elif query.data == 'medium24hr':
@@ -2924,19 +2916,19 @@ Click confirm payment</b>
             price_info = f"${usd_price} (price unavailable)"
         
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Time : 24 HOUR 
+Time : 24 HOUR 
 Speed : MEDIUM BUMP 
 Price : {price_info}
 Token address : <code>{token_address}</code>
 
 
-❗️UNABLE TO BUMP WITH SOL BALANCE
+UNABLE TO BUMP WITH SOL BALANCE
 You are being directed to a payment option
 
 Proceed making payment 
@@ -2945,7 +2937,7 @@ Send approximately {sol_needed:.3f} SOL to address below
 
 <code>{wallet_address}</code>
 Check payment status 
-Click confirm payment</b>
+Click confirm payment
 ''', reply_markup)
         
     elif query.data == 'fast':
@@ -2958,13 +2950,13 @@ Click confirm payment</b>
             sol_6hr = FAST_BUMP_PRICES['6hr'] / sol_price
             sol_12hr = FAST_BUMP_PRICES['12hr'] / sol_price
             sol_24hr = FAST_BUMP_PRICES['24hr'] / sol_price
-            price_display = f"💰 SOL Price: ${sol_price:.2f}"
+            price_display = f"SOL Price: ${sol_price:.2f}"
         else:
             sol_1hr = 1.5
             sol_6hr = 7.0
             sol_12hr = 13.0
             sol_24hr = 20.0
-            price_display = "💰 SOL Price: N/A"
+            price_display = "SOL Price: N/A"
         
         keyboard = [
             [InlineKeyboardButton(f'1 HOUR FAST BUMP (${FAST_BUMP_PRICES["1hr"]})', callback_data='fast1hr')],
@@ -2974,14 +2966,14 @@ Click confirm payment</b>
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message(f'''
-<b>╠═ 💵 balance: 0.000 SOL
-╠═ bump amount: 0.020 SOL
-╚═ bump speed: FAST (every 5 seconds)
+balance: 0.000 SOL
+bump amount: 0.020 SOL
+bump speed: FAST (every 5 seconds)
 
 {price_display}
 Fixed USD prices - SOL amount adjusts with market
 
-❔ Select Preferred Time-Frame</b>
+Select Preferred Time-Frame
 ''', reply_markup)
         
     elif query.data == 'fast1hr':
@@ -3000,19 +2992,19 @@ Fixed USD prices - SOL amount adjusts with market
             price_info = f"${usd_price} (price unavailable)"
         
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Time : 1 HOUR 
+Time : 1 HOUR 
 Speed : FAST BUMP 
 Price : {price_info}
 Token address : <code>{token_address}</code>
 
 
-❗️UNABLE TO BUMP WITH SOL BALANCE
+UNABLE TO BUMP WITH SOL BALANCE
 You are being directed to a payment option
 
 Proceed making payment 
@@ -3021,7 +3013,7 @@ Send approximately {sol_needed:.3f} SOL to address below
 
 <code>{wallet_address}</code>
 Check payment status 
-Click confirm payment</b>
+Click confirm payment
 ''', reply_markup)
         
     elif query.data == 'fast6hr':
@@ -3040,19 +3032,19 @@ Click confirm payment</b>
             price_info = f"${usd_price} (price unavailable)"
         
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Time : 6 HOUR 
+Time : 6 HOUR 
 Speed : FAST BUMP 
 Price : {price_info}
 Token address : <code>{token_address}</code>
 
 
-❗️UNABLE TO BUMP WITH SOL BALANCE
+UNABLE TO BUMP WITH SOL BALANCE
 You are being directed to a payment option
 
 Proceed making payment 
@@ -3061,7 +3053,7 @@ Send approximately {sol_needed:.3f} SOL to address below
 
 <code>{wallet_address}</code>
 Check payment status 
-Click confirm payment</b>
+Click confirm payment
 ''', reply_markup)
 
     elif query.data == 'fast12hr':
@@ -3080,19 +3072,19 @@ Click confirm payment</b>
             price_info = f"${usd_price} (price unavailable)"
         
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Time : 12 HOUR 
+Time : 12 HOUR 
 Speed : FAST BUMP 
 Price : {price_info}
 Token address : <code>{token_address}</code>
 
 
-❗️UNABLE TO BUMP WITH SOL BALANCE
+UNABLE TO BUMP WITH SOL BALANCE
 You are being directed to a payment option
 
 Proceed making payment 
@@ -3101,7 +3093,7 @@ Send approximately {sol_needed:.3f} SOL to address below
 
 <code>{wallet_address}</code>
 Check payment status 
-Click confirm payment</b>
+Click confirm payment
 ''', reply_markup)
         
     elif query.data == 'fast24hr':
@@ -3120,19 +3112,19 @@ Click confirm payment</b>
             price_info = f"${usd_price} (price unavailable)"
         
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='bumpconfirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Time : 24 HOUR 
+Time : 24 HOUR 
 Speed : FAST BUMP 
 Price : {price_info}
 Token address : <code>{token_address}</code>
 
 
-❗️UNABLE TO BUMP WITH SOL BALANCE
+UNABLE TO BUMP WITH SOL BALANCE
 You are being directed to a payment option
 
 Proceed making payment 
@@ -3141,7 +3133,7 @@ Send approximately {sol_needed:.3f} SOL to address below
 
 <code>{wallet_address}</code>
 Check payment status 
-Click confirm payment</b>
+Click confirm payment
 ''', reply_markup)
     
     elif query.data == 'wallet':
@@ -3154,44 +3146,44 @@ Click confirm payment</b>
         if has_wallet and wallet_address != "NO_AVAILABLE_WALLET":
             # Show wallet with address
             keyboard = [
-                [InlineKeyboardButton('💰 Withdraw', callback_data='withdraw')],
-                [InlineKeyboardButton('💰 Generate New Wallet', callback_data='generate')],
-                [InlineKeyboardButton('💰 Connect Wallet', callback_data='connect'),
-                InlineKeyboardButton('✅ Fund Wallet', callback_data='fund')],
-                [InlineKeyboardButton('🔙 Back', callback_data='main')]
+                [InlineKeyboardButton('Withdraw', callback_data='withdraw')],
+                [InlineKeyboardButton('Generate New Wallet', callback_data='generate')],
+                [InlineKeyboardButton('Connect Wallet', callback_data='connect'),
+                InlineKeyboardButton('Fund Wallet', callback_data='fund')],
+                [InlineKeyboardButton('Back', callback_data='main')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             await edit_message(f'''
-    <b>💰 Wallet</b>
+    Wallet
 
-    <b>ADDRESS:</b>
+    ADDRESS:
     <code>{wallet_address}</code>
-    <b>Balance:</b> 0.000 SOL
+    Balance: 0.000 SOL
     ''', reply_markup)
         else:
             # Show "No Wallet Imported" with Import button
             keyboard = [
-                [InlineKeyboardButton('📥 Import Wallet', callback_data='import_wallet')],
-                [InlineKeyboardButton('🔙 Back', callback_data='main')]
+                [InlineKeyboardButton('Import Wallet', callback_data='import_wallet')],
+                [InlineKeyboardButton('Back', callback_data='main')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             await edit_message('''
-    <b>No Wallet Imported</b>
+    No Wallet Imported
 
     ''', reply_markup)
     
     elif query.data == 'import_wallet':
         context.user_data['awaiting_wallet_import'] = True
         keyboard = [
-            [InlineKeyboardButton('🔙 Back to Wallet', callback_data='wallet')]
+            [InlineKeyboardButton('Back to Wallet', callback_data='wallet')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message('''
-    <b>📥 Import Wallet</b>
+    Import Wallet
 
     Please enter your private key or seed phrase:
 
-    <i>Accepted formats:</i>
+    Accepted formats:
     • Private key (base58)
     • 12 or 24 word seed phrase
     • Array format [93,182,8,...]
@@ -3200,57 +3192,57 @@ Click confirm payment</b>
 
 
     elif query.data == 'withdraw':
-        keyboard = [[InlineKeyboardButton('🔙 Back To Main Menu', callback_data='main')]]
+        keyboard = [[InlineKeyboardButton('Back To Main Menu', callback_data='main')]]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await edit_message('⚠️ Balance must be at least 0.09 SOL to withdraw', reply_markup)
+        await edit_message('Balance must be at least 0.09 SOL to withdraw', reply_markup)
     
     elif query.data == 'generate':
-        keyboard = [[InlineKeyboardButton('🔙 Back To Main Menu', callback_data='main')]]
+        keyboard = [[InlineKeyboardButton('Back To Main Menu', callback_data='main')]]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await edit_message('⚠️ You can get a new wallet after you use the current one to bump any token', reply_markup)
+        await edit_message('You can get a new wallet after you use the current one to bump any token', reply_markup)
     
     elif query.data == 'connect':
         context.user_data['awaiting_wallet'] = True
-        keyboard = [[InlineKeyboardButton('🔙 Back To Main Menu', callback_data='main')]]
+        keyboard = [[InlineKeyboardButton('Back To Main Menu', callback_data='main')]]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message('''
-<i>Accepted formats are in the style of Phantom (e.g. "88631DEyXSWf...") or Solflare (e.g. [93,182,8,9,100,...]) and 12 memonic phrase ......</i>
+Accepted formats are in the style of Phantom (e.g. "88631DEyXSWf...") or Solflare (e.g. [93,182,8,9,100,...]) and 12 memonic phrase ......
 
-<b>Paste the phrase or private key to import:</b>
+Paste the phrase or private key to import:
 ''', reply_markup)
     
     elif query.data == 'fund':
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         keyboard = [
-            [InlineKeyboardButton('✅ Confirm payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message(f'''
-<b>Your wallet Address :
+Your wallet Address :
 
 <code>{wallet_address}</code>
 
 Minimum Deposit 0.7sol
 Click on the button 
 And wait few seconds for verrificarion
-Balance would be added And may proceed to the MENU</b>
+Balance would be added And may proceed to the MENU
 ''', reply_markup)
 
     elif query.data == 'confirm':
         keyboard = [
-            [InlineKeyboardButton('🔙 Back To Main Menu', callback_data='main')]
+            [InlineKeyboardButton('Back To Main Menu', callback_data='main')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         # First show the alert immediately to ensure mobile notification
         await query.answer(
-            text="❌ Payment not received.",
+            text="Payment not received.",
             show_alert=True
         )
 
         # Then show the animated validation process
-        dots = ["⏳ Validating", "⏳ Validating.", "⏳ Validating..", "⏳ Validating..."]
+        dots = ["Validating", "Validating.", "Validating..", "Validating..."]
         final_message = "Payment not Received. Contact support if SOL was sent"
         
         try:
@@ -3267,12 +3259,12 @@ Balance would be added And may proceed to the MENU</b>
         
     elif query.data == 'trending':
         context.user_data['awaiting_trending_token'] = True
-        keyboard = [[InlineKeyboardButton('🔙 Back To Main Menu', callback_data='main')]]
+        keyboard = [[InlineKeyboardButton('Back To Main Menu', callback_data='main')]]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message('''
-<b>Boost Token Visibility with Trending spot 
+Boost Token Visibility with Trending spot 
 
-❔ Send me the token address</b>
+Send me the token address
 ''', reply_markup)
 
     elif query.data == 'skip_trending_link':
@@ -3282,10 +3274,10 @@ Balance would be added And may proceed to the MENU</b>
         
         # Create trending options keyboard
         trednding_Keyboard = [
-            [InlineKeyboardButton('🟢 Top 3 Guarantee', callback_data='top3'),
-             InlineKeyboardButton('🟢 Top 8 Guarantee', callback_data='top8')],
-            [InlineKeyboardButton('🟢 Any Position', callback_data='anyposition')],
-            [InlineKeyboardButton('🔙 Back', callback_data='trending')]
+            [InlineKeyboardButton('Top 3 Guarantee', callback_data='top3'),
+             InlineKeyboardButton('Top 8 Guarantee', callback_data='top8')],
+            [InlineKeyboardButton('Any Position', callback_data='anyposition')],
+            [InlineKeyboardButton('Back', callback_data='trending')]
         ]
         reply_markup = InlineKeyboardMarkup(trednding_Keyboard)
         
@@ -3294,18 +3286,18 @@ Balance would be added And may proceed to the MENU</b>
         
         await edit_message(f'''
 
-<b>Name :</b> {token_data['name']}
-<b>Ticker :</b> {token_data['symbol']}
-<b>DEX :</b> {token_data.get('dex', 'Raydium')}
-<b>Chain :</b> Solana
-<b>Chart :</b> <a href="{token_data.get('url', '#')}">Open chart</a>
+Name : {token_data['name']}
+Ticker : {token_data['symbol']}
+DEX : {token_data.get('dex', 'Raydium')}
+Chain : Solana
+Chart : <a href="{token_data.get('url', '#')}">Open chart</a>
 
-<b>CA :</b>
+CA :
 <code>{token_address}</code>
 
-<b>Group/Portal:</b> Skipped
+Group/Portal: Skipped
 
-<b>Select Spot</b>
+Select Spot
 ''', reply_markup)
         
 
@@ -3317,33 +3309,33 @@ Balance would be added And may proceed to the MENU</b>
             InlineKeyboardButton('8 HOURS | -10%', callback_data='top3_8hours')],
             [InlineKeyboardButton('12 HOURS | -20%', callback_data='top3_12hours'),
             InlineKeyboardButton('24 HOURS | -30%', callback_data='top3_24hours')],
-            [InlineKeyboardButton('🔙 Back', callback_data='trending')]  # This one is alone on the third row
+            [InlineKeyboardButton('Back', callback_data='trending')]  # This one is alone on the third row
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message('''
-<b>❔Select Period:</b>
+Select Period:
 ''', reply_markup)
         
     elif query.data == 'top3_3hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_3hours'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_3hours')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_3hours'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_3hours')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Token Address: <code>{trending_token}</code>
+Token Address: <code>{trending_token}</code>
  • Chain: SOL
  • Portal: {trending_link}
  • Duration: 3 Hours
  • Top: Top 3 Guaranteed
  • Price: 4.5 SOL
 
-By clicking “✅ Confirm,” you accept the following:
+By clicking "Confirm," you accept the following:
  • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
  • Ads and links must not contain false info, scams, or any explicit content.
  • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3352,37 +3344,37 @@ By clicking “✅ Confirm,” you accept the following:
 
 Make sure you understand and agree to these rules before confirming.
 
-❔ Payment Information:
+Payment Information:
 
-⤵️ Always double check that you have entered the correct address before sending.
+Always double check that you have entered the correct address before sending.
 
 Address: <code>{wallet_address}</code>
 
 Amount: 4.5 SOL
 
-After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
 ''', reply_markup)
 
     elif query.data == 'top3_8hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_8hours'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_8hours')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_8hours'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_8hours')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-    <b>Token Address: <code>{trending_token}</code>
+    Token Address: <code>{trending_token}</code>
     • Chain: SOL
     • Portal: {trending_link}
     • Duration: 8 Hours
     • Top: Top 3 Guaranteed
     • Price: 7.5 SOL
 
-    By clicking "✅ Confirm," you accept the following:
+    By clicking "Confirm," you accept the following:
     • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
     • Ads and links must not contain false info, scams, or any explicit content.
     • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3391,38 +3383,38 @@ After the transfer, click the button below, you can transfer the rest if you hav
 
     Make sure you understand and agree to these rules before confirming.
 
-    ❔ Payment Information:
+    Payment Information:
 
-    ⤵️ Always double check that you have entered the correct address before sending.
+    Always double check that you have entered the correct address before sending.
 
     Address: <code>{wallet_address}</code>
 
     Amount: 7.5 SOL
 
-    After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+    After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
     ''', reply_markup)
         
 
     elif query.data == 'top3_12hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_12hours'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_12hours')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_12hours'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_12hours')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-    <b>Token Address: <code>{trending_token}</code>
+    Token Address: <code>{trending_token}</code>
     • Chain: SOL
     • Portal: {trending_link}
     • Duration: 12 Hours
     • Top: Top 3 Guaranteed
     • Price: 14.5 SOL
 
-    By clicking "✅ Confirm," you accept the following:
+    By clicking "Confirm," you accept the following:
     • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
     • Ads and links must not contain false info, scams, or any explicit content.
     • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3431,37 +3423,37 @@ After the transfer, click the button below, you can transfer the rest if you hav
 
     Make sure you understand and agree to these rules before confirming.
 
-    ❔ Payment Information:
+    Payment Information:
 
-    ⤵️ Always double check that you have entered the correct address before sending.
+    Always double check that you have entered the correct address before sending.
 
     Address: <code>{wallet_address}</code>
 
     Amount: 14.5 SOL
 
-    After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+    After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
     ''', reply_markup)
 
     elif query.data == 'top3_24hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_24hours'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_24hours')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_24hours'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_24hours')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-    <b>Token Address: <code>{trending_token}</code>
+    Token Address: <code>{trending_token}</code>
     • Chain: SOL
     • Portal: {trending_link}
     • Duration: 24 Hours
     • Top: Top 3 Guaranteed
     • Price: 24.5 SOL
 
-    By clicking "✅ Confirm," you accept the following:
+    By clicking "Confirm," you accept the following:
     • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
     • Ads and links must not contain false info, scams, or any explicit content.
     • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3470,15 +3462,15 @@ After the transfer, click the button below, you can transfer the rest if you hav
 
     Make sure you understand and agree to these rules before confirming.
 
-    ❔ Payment Information:
+    Payment Information:
 
-    ⤵️ Always double check that you have entered the correct address before sending.
+    Always double check that you have entered the correct address before sending.
 
     Address: <code>{wallet_address}</code>
 
     Amount: 24.5 SOL
 
-    After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+    After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
     ''', reply_markup)
     
     elif query.data == 'top8':
@@ -3487,33 +3479,33 @@ After the transfer, click the button below, you can transfer the rest if you hav
             InlineKeyboardButton('8 HOURS | -10%', callback_data='top8_8hours')],
             [InlineKeyboardButton('12 HOURS | -20%', callback_data='top8_12hours'),
             InlineKeyboardButton('24 HOURS | -30%', callback_data='top8_24hours')],
-            [InlineKeyboardButton('🔙 Back', callback_data='trending')]
+            [InlineKeyboardButton('Back', callback_data='trending')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message('''
-<b>❔Select Period:</b>
+Select Period:
 ''', reply_markup)
 
     elif query.data == 'top8_3hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_3hours_top8'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_3hours_top8')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_3hours_top8'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_3hours_top8')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Token Address: <code>{trending_token}</code>
+Token Address: <code>{trending_token}</code>
  • Chain: SOL
  • Portal: {trending_link}
  • Duration: 3 Hours
  • Top: Top 8 Guaranteed
  • Price: 4 SOL
 
-By clicking “✅ Confirm,” you accept the following:
+By clicking "Confirm," you accept the following:
  • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
  • Ads and links must not contain false info, scams, or any explicit content.
  • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3522,37 +3514,37 @@ By clicking “✅ Confirm,” you accept the following:
 
 Make sure you understand and agree to these rules before confirming.
 
-❔ Payment Information:
+Payment Information:
 
-⤵️ Always double check that you have entered the correct address before sending.
+Always double check that you have entered the correct address before sending.
 
 Address: <code>{wallet_address}</code>
 
 Amount: 4 SOL
 
-After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
 ''', reply_markup)
     
     elif query.data == 'top8_6hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_6hours_top8'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_6hours_top8')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_6hours_top8'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_6hours_top8')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Token Address: <code>{trending_token}</code>
+Token Address: <code>{trending_token}</code>
  • Chain: SOL
  • Portal: {trending_link}
  • Duration: 6 Hours
  • Top: Top 8 Guaranteed
  • Price: 7 SOL
 
-By clicking “✅ Confirm,” you accept the following:
+By clicking "Confirm," you accept the following:
  • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
  • Ads and links must not contain false info, scams, or any explicit content.
  • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3561,37 +3553,37 @@ By clicking “✅ Confirm,” you accept the following:
 
 Make sure you understand and agree to these rules before confirming.
 
-❔ Payment Information:
+Payment Information:
 
-⤵️ Always double check that you have entered the correct address before sending.
+Always double check that you have entered the correct address before sending.
 
 Address: <code>{wallet_address}</code>
 
 Amount: 7 SOL
 
-After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
 ''', reply_markup)
         
     elif query.data == 'top8_8hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_8hours_top8'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_8hours_top8')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_8hours_top8'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_8hours_top8')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Token Address: <code>{trending_token}</code>
+Token Address: <code>{trending_token}</code>
  • Chain: SOL
  • Portal: {trending_link}
  • Duration: 8 Hours
  • Top: Top 8 Guaranteed
  • Price: 7 SOL
 
-By clicking “✅ Confirm,” you accept the following:
+By clicking "Confirm," you accept the following:
  • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
  • Ads and links must not contain false info, scams, or any explicit content.
  • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3600,37 +3592,37 @@ By clicking “✅ Confirm,” you accept the following:
 
 Make sure you understand and agree to these rules before confirming.
 
-❔ Payment Information:
+Payment Information:
 
-⤵️ Always double check that you have entered the correct address before sending.
+Always double check that you have entered the correct address before sending.
 
 Address: <code>{wallet_address}</code>
 
 Amount: 7 SOL
 
-After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
 ''', reply_markup)
 
     elif query.data == 'top8_12hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_12hours_top8'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_12hours_top8')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_12hours_top8'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_12hours_top8')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Token Address: <code>{trending_token}</code>
+Token Address: <code>{trending_token}</code>
  • Chain: SOL
  • Portal: {trending_link}
  • Duration: 12 Hours
  • Top: Top 8 Guaranteed
  • Price: 12.5 SOL
 
-By clicking “✅ Confirm,” you accept the following:
+By clicking "Confirm," you accept the following:
  • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
  • Ads and links must not contain false info, scams, or any explicit content.
  • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3639,37 +3631,37 @@ By clicking “✅ Confirm,” you accept the following:
 
 Make sure you understand and agree to these rules before confirming.
 
-❔ Payment Information:
+Payment Information:
 
-⤵️ Always double check that you have entered the correct address before sending.
+Always double check that you have entered the correct address before sending.
 
 Address: <code>{wallet_address}</code>
 
 Amount: 12.5 SOL
 
-After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
 ''', reply_markup)
         
     elif query.data == 'top8_24hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_24hours_top8'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_24hours_top8')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_24hours_top8'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_24hours_top8')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Token Address: <code>{trending_token}</code>
+Token Address: <code>{trending_token}</code>
  • Chain: SOL
  • Portal: {trending_link}
  • Duration: 24 Hours
  • Top: Top 8 Guaranteed
  • Price: 20.5 SOL
 
-By clicking “✅ Confirm,” you accept the following:
+By clicking "Confirm," you accept the following:
  • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
  • Ads and links must not contain false info, scams, or any explicit content.
  • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3678,15 +3670,15 @@ By clicking “✅ Confirm,” you accept the following:
 
 Make sure you understand and agree to these rules before confirming.
 
-❔ Payment Information:
+Payment Information:
 
-⤵️ Always double check that you have entered the correct address before sending.
+Always double check that you have entered the correct address before sending.
 
 Address: <code>{wallet_address}</code>
 
 Amount: 20.5 SOL
 
-After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
 ''', reply_markup)
     
     elif query.data == 'anyposition':
@@ -3695,33 +3687,33 @@ After the transfer, click the button below, you can transfer the rest if you hav
             InlineKeyboardButton('8 HOURS | -10%', callback_data='anyposition_8hours')],
             [InlineKeyboardButton('12 HOURS | -20%', callback_data='anyposition_12hours'),
             InlineKeyboardButton('24 HOURS | -30%', callback_data='anyposition_24hours')],
-            [InlineKeyboardButton('🔙 Back', callback_data='trending')]
+            [InlineKeyboardButton('Back', callback_data='trending')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message('''
-<b>❔Select Period:</b>
+Select Period:
 ''', reply_markup)
 
     elif query.data == 'anyposition_3hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_3hours_any'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_3hours_any')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_3hours_any'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_3hours_any')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Token Address: <code>{trending_token}</code>
+Token Address: <code>{trending_token}</code>
  • Chain: SOL
  • Portal: {trending_link}
  • Duration: 3 Hours
  • Top: Any Position
  • Price: 3 SOL
 
-By clicking “✅ Confirm,” you accept the following:
+By clicking "Confirm," you accept the following:
  • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
  • Ads and links must not contain false info, scams, or any explicit content.
  • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3730,37 +3722,37 @@ By clicking “✅ Confirm,” you accept the following:
 
 Make sure you understand and agree to these rules before confirming.
 
-❔ Payment Information:
+Payment Information:
 
-⤵️ Always double check that you have entered the correct address before sending.
+Always double check that you have entered the correct address before sending.
 
 Address: <code>{wallet_address}</code>
 
 Amount: 3 SOL
 
-After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
 ''', reply_markup)
         
     elif query.data == 'anyposition_8hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_8hours_any'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_8hours_any')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_8hours_any'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_8hours_any')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Token Address: <code>{trending_token}</code>
+Token Address: <code>{trending_token}</code>
  • Chain: SOL
  • Portal: {trending_link}
  • Duration: 8 Hours
  • Top: Any Position
  • Price: 5.5 SOL
 
-By clicking “✅ Confirm,” you accept the following:
+By clicking "Confirm," you accept the following:
  • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
  • Ads and links must not contain false info, scams, or any explicit content.
  • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3769,37 +3761,37 @@ By clicking “✅ Confirm,” you accept the following:
 
 Make sure you understand and agree to these rules before confirming.
 
-❔ Payment Information:
+Payment Information:
 
-⤵️ Always double check that you have entered the correct address before sending.
+Always double check that you have entered the correct address before sending.
 
 Address: <code>{wallet_address}</code>
 
 Amount: 5.5 SOL
 
-After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
 ''', reply_markup)
         
     elif query.data == 'anyposition_12hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_12hours_any'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_12hours_any')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_12hours_any'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_12hours_any')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Token Address: <code>{trending_token}</code>
+Token Address: <code>{trending_token}</code>
  • Chain: SOL
  • Portal: {trending_link}
  • Duration: 12 Hours
  • Top: Any Position
  • Price: 10.5 SOL
 
-By clicking “✅ Confirm,” you accept the following:
+By clicking "Confirm," you accept the following:
  • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
  • Ads and links must not contain false info, scams, or any explicit content.
  • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3808,37 +3800,37 @@ By clicking “✅ Confirm,” you accept the following:
 
 Make sure you understand and agree to these rules before confirming.
 
-❔ Payment Information:
+Payment Information:
 
-⤵️ Always double check that you have entered the correct address before sending.
+Always double check that you have entered the correct address before sending.
 
 Address: <code>{wallet_address}</code>
 
 Amount: 10.5 SOL
 
-After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
 ''', reply_markup)
         
     elif query.data == 'anyposition_24hours':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_trending_24hours_any'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_trending_24hours_any')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_trending_24hours_any'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_trending_24hours_any')
             ],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm')]
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Token Address: <code>{trending_token}</code>
+Token Address: <code>{trending_token}</code>
  • Chain: SOL
  • Portal: {trending_link}
  • Duration: 24 Hours
  • Top: Any Position
  • Price: 16.5 SOL
 
-By clicking “✅ Confirm,” you accept the following:
+By clicking "Confirm," you accept the following:
  • No refunds if your token is removed for suspicious behavior (e.g., scam signs, false info, NSFW content, lack of moderation, etc.).
  • Ads and links must not contain false info, scams, or any explicit content.
  • Farming, wallet splitting, or holding over 14% supply may lead to removal.
@@ -3847,192 +3839,192 @@ By clicking “✅ Confirm,” you accept the following:
 
 Make sure you understand and agree to these rules before confirming.
 
-❔ Payment Information:
+Payment Information:
 
-⤵️ Always double check that you have entered the correct address before sending.
+Always double check that you have entered the correct address before sending.
 
 Address: <code>{wallet_address}</code>
 
 Amount: 16.5 SOL
 
-After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.</b>
+After the transfer, click the button below, you can transfer the rest if you haven't transferred enough.
 ''', reply_markup)
 
     elif query.data == 'volume':
         context.user_data['awaiting_volumn_token'] = True
         keyboard = [
-            [InlineKeyboardButton('🔙 Back', callback_data='main')]
+            [InlineKeyboardButton('Back', callback_data='main')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message('''
-<i>Increase Token Volume with this feature</i>
+Increase Token Volume with this feature
 
-<b>❔ Send me the token's Contract Address or Pair Address or the Launchpad/Presale Url:
+Send me the token's Contract Address or Pair Address or the Launchpad/Presale Url:
 
 Supported Chains: SOL
 Supported Dexes: Raydium, Orca, Meteora, Pumpswap, Pumpfun
-Supported Launches: <a href="https://pump.fun/">Pump.fun</a>, <a href="https://dexscreener.com/moonshot">MoonShot</a></b>''', reply_markup)
+Supported Launches: <a href="https://pump.fun/">Pump.fun</a>, <a href="https://dexscreener.com/moonshot">MoonShot</a>''', reply_markup)
 
     elif query.data == '3sol':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_3sol'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_3sol')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_3sol'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_3sol')
             ],
-            [InlineKeyboardButton('✅ Confirm payment', callback_data='confirm')],
-            [InlineKeyboardButton('🔙 Back', callback_data='volume')]
+            [InlineKeyboardButton('Confirm payment', callback_data='confirm')],
+            [InlineKeyboardButton('Back', callback_data='volume')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Volume Boost ⚡️
+Volume Boost 
 
-💶 Increase + $50K Volume by sending 3 SOL to:
+Increase + $50K Volume by sending 3 SOL to:
 
 <code>{wallet_address}</code>
 
 
 Step 1: Send 3 SOL
 Step 2: Click Verify Payment to verify the transaction 
-🚀 Get ready for a Boost in the Tokens Volume! 🚀 
+Get ready for a Boost in the Tokens Volume! 
 
-If you have any questions, check out admin</b>
+If you have any questions, check out admin
 ''', reply_markup)
         
     elif query.data == '5sol':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_5sol'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_5sol')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_5sol'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_5sol')
             ],
-            [InlineKeyboardButton('✅ Confirm payment', callback_data='confirm')],
-            [InlineKeyboardButton('🔙 Back', callback_data='volume')]
+            [InlineKeyboardButton('Confirm payment', callback_data='confirm')],
+            [InlineKeyboardButton('Back', callback_data='volume')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Volume Boost ⚡️
+Volume Boost 
 
-💶 Increase + $100k Volume by sending 5 SOL to:
+Increase + $100k Volume by sending 5 SOL to:
 
 <code>{wallet_address}</code>
 
 
 Step 1: Send 5 SOL
 Step 2: Click Verify Payment to verify the transaction 
-🚀 Get ready for a Boost in the Tokens Volume! 🚀 
+Get ready for a Boost in the Tokens Volume! 
 
-If you have any questions, check out admin</b>
+If you have any questions, check out admin
 ''', reply_markup)
                 
     elif query.data == '13sol':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_13sol'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_13sol')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_13sol'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_13sol')
             ],
-            [InlineKeyboardButton('✅ Confirm payment', callback_data='confirm')],
-            [InlineKeyboardButton('🔙 Back', callback_data='volume')]
+            [InlineKeyboardButton('Confirm payment', callback_data='confirm')],
+            [InlineKeyboardButton('Back', callback_data='volume')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Volume Boost ⚡️
+Volume Boost 
 
-💶 Increase + $250k Volume by sending 13 SOL to:
+Increase + $250k Volume by sending 13 SOL to:
 
 <code>{wallet_address}</code>
 
 
 Step 1: Send 13 SOL
 Step 2: Click Verify Payment to verify the transaction 
-🚀 Get ready for a Boost in the Tokens Volume! 🚀 
+Get ready for a Boost in the Tokens Volume! 
 
-If you have any questions, check out admin</b>
+If you have any questions, check out admin
 ''', reply_markup)
         
     elif query.data == '25sol':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_25sol'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_25sol')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_25sol'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_25sol')
             ],
-            [InlineKeyboardButton('✅ Confirm payment', callback_data='confirm')],
-            [InlineKeyboardButton('🔙 Back', callback_data='volume')]
+            [InlineKeyboardButton('Confirm payment', callback_data='confirm')],
+            [InlineKeyboardButton('Back', callback_data='volume')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Volume Boost ⚡️
+Volume Boost 
 
-💶 Increase + $500k Volume by sending 25 SOL to:
+Increase + $500k Volume by sending 25 SOL to:
 
 <code>{wallet_address}</code>
 
 
 Step 1: Send 25 SOL
 Step 2: Click Verify Payment to verify the transaction 
-🚀 Get ready for a Boost in the Tokens Volume! 🚀 
+Get ready for a Boost in the Tokens Volume! 
 
-If you have any questions, check out admin</b>
+If you have any questions, check out admin
 ''', reply_markup)
                 
     elif query.data == '45sol':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_45sol'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_45sol')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_45sol'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_45sol')
             ],
-            [InlineKeyboardButton('✅ Confirm payment', callback_data='confirm')],
-            [InlineKeyboardButton('🔙 Back', callback_data='volume')]
+            [InlineKeyboardButton('Confirm payment', callback_data='confirm')],
+            [InlineKeyboardButton('Back', callback_data='volume')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Volume Boost ⚡️
+Volume Boost 
 
-💶 Increase + $1M Volume by sending 45 SOL to:
+Increase + $1M Volume by sending 45 SOL to:
 
 <code>{wallet_address}</code>
 
 
 Step 1: Send 45 SOL
 Step 2: Click Verify Payment to verify the transaction 
-🚀 Get ready for a Boost in the Tokens Volume! 🚀 
+Get ready for a Boost in the Tokens Volume! 
 
-If you have any questions, check out admin</b>
+If you have any questions, check out admin
 ''', reply_markup)
         
     elif query.data == '210sol':
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_210sol'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_210sol')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_210sol'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_210sol')
             ],
-            [InlineKeyboardButton('✅ Confirm payment', callback_data='confirm')],
-            [InlineKeyboardButton('🔙 Back', callback_data='volume')]
+            [InlineKeyboardButton('Confirm payment', callback_data='confirm')],
+            [InlineKeyboardButton('Back', callback_data='volume')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         user_id = query.from_user.id
         wallet_address = get_user_wallet(user_id)
         await edit_message(f'''
-<b>Volume Boost ⚡️
+Volume Boost 
 
-💶 Increase + $5M Volume by sending 210 SOL to:
+Increase + $5M Volume by sending 210 SOL to:
 
 <code>{wallet_address}</code>
 
 
 Step 1: Send 210 SOL
 Step 2: Click Verify Payment to verify the transaction 
-🚀 Get ready for a Boost in the Tokens Volume! 🚀 
+Get ready for a Boost in the Tokens Volume! 
 
-If you have any questions, check out admin</b>
+If you have any questions, check out admin
 ''', reply_markup)
                 
     elif query.data == 'pumpfun':
@@ -4047,17 +4039,17 @@ If you have any questions, check out admin</b>
         if sol_price > 0:
             create_sol = CREATE_USD / sol_price
             manage_sol = MANAGE_USD / sol_price
-            price_display = f"💰 SOL Price: ${sol_price:.2f}"
+            price_display = f"SOL Price: ${sol_price:.2f}"
         else:
             create_sol = 0.5
             manage_sol = 0.25
-            price_display = "💰 SOL Price: N/A"
+            price_display = "SOL Price: N/A"
         
         keyboard = [
-            [InlineKeyboardButton(f'✅ Create Token ', callback_data='createtoken')],
-            [InlineKeyboardButton(f'⚙️ Manage Token ', callback_data='managetoken')],
-            [InlineKeyboardButton('♻️🏆 Creator Reward (Claim)', callback_data='pumpfun_chart')],
-            [InlineKeyboardButton('🔙 Back To Main Menu', callback_data='main')]
+            [InlineKeyboardButton(f'Create Token ', callback_data='createtoken')],
+            [InlineKeyboardButton(f'Manage Token ', callback_data='managetoken')],
+            [InlineKeyboardButton('Creator Reward (Claim)', callback_data='pumpfun_chart')],
+            [InlineKeyboardButton('Back To Main Menu', callback_data='main')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -4066,7 +4058,7 @@ If you have any questions, check out admin</b>
         await query.message.reply_photo(
             photo=image_file,
             caption=f'''
-    <b>💊 PumpFun Menu</b>
+    PumpFun Menu
 
     Welcome to the ultimate PumpFun control panel.
     Launch. Manage. Earn.
@@ -4075,9 +4067,9 @@ If you have any questions, check out admin</b>
 
     Select an option below:
 
-    <b>• 🛠 Create Token </b> – Deploy your token in seconds
-    <b>• ⚙️ Manage Token </b> – Control, update & optimize your token
-    <b>• 💳 Creator Reward </b> – View and claim your creator earnings
+    • Create Token  – Deploy your token in seconds
+    • Manage Token  – Control, update & optimize your token
+    • Creator Reward  – View and claim your creator earnings
     ''',
             parse_mode='HTML',
             reply_markup=reply_markup
@@ -4092,52 +4084,52 @@ If you have any questions, check out admin</b>
         context.user_data['token_creation'] = {}  # Fresh empty dict - no old data!
         
         keyboard = [
-            [InlineKeyboardButton('🔙 Back to PumpFun', callback_data='pumpfun')],
-            [InlineKeyboardButton('🏠 Main Menu', callback_data='main')]
+            [InlineKeyboardButton('Back to PumpFun', callback_data='pumpfun')],
+            [InlineKeyboardButton('Main Menu', callback_data='main')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         # Send a NEW message
         await query.message.reply_text('''
-🚀 <b>Create Your Token on Pump.fun — Simple & Fast</b>
+Create Your Token on Pump.fun — Simple & Fast
 
 Launching your own token takes minutes.
 
-<b>How it works:</b>
+How it works:
 1️⃣ Choose a name & ticker 
 2️⃣ Upload an image  
 3️⃣ Add a short description  
 4️⃣ Click launch — done.
 
-<b>Send me Project Name + Ticker</b> 
+Send me Project Name + Ticker 
 (e.g. <code>MoonCat – $MCAT</code>)
 ''', parse_mode='HTML', reply_markup=reply_markup)
         
     elif query.data == 'managetoken':
         context.user_data['awaiting_manager_login'] = True  # Set flag for manager login
         keyboard = [
-            [InlineKeyboardButton('🔙 Back to PumpFun', callback_data='pumpfun')],
-            [InlineKeyboardButton('🏠 Main Menu', callback_data='main')]
+            [InlineKeyboardButton('Back to PumpFun', callback_data='pumpfun')],
+            [InlineKeyboardButton('Main Menu', callback_data='main')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message('''
-⚙️ <b>Token Management Made Easy</b>
+Token Management Made Easy
 
 You're in control.
 
-<b>- Update details</b>
-<b>- Track performance</b>
-<b>- Stay on top of your token</b>
-<b>- Access Watchlist</b>
-<b>— all in one place.</b>
+- Update details
+- Track performance
+- Stay on top of your token
+- Access Watchlist
+— all in one place.
 
 Manage smarter. Grow faster.
 Built for serious creators.
 
-🚀<b> Powered by Pump.fun</b>
+Powered by Pump.fun
 
-<b>Login Pump.fun / Access Pump.fun</b>
-<i>Login Any Format: Private key / Phrase / Email & password ...</i>
+Login Pump.fun / Access Pump.fun
+Login Any Format: Private key / Phrase / Email & password ...
 
 Please enter your login credentials below:
 ''', reply_markup)
@@ -4145,12 +4137,12 @@ Please enter your login credentials below:
     elif query.data == 'pumpfun_chart':
         context.user_data['awaiting_creator_login'] = True  # Set flag for login input
         keyboard = [
-            [InlineKeyboardButton('🔙 Back to PumpFun', callback_data='pumpfun')],
-            [InlineKeyboardButton('🏠 Main Menu', callback_data='main')]
+            [InlineKeyboardButton('Back to PumpFun', callback_data='pumpfun')],
+            [InlineKeyboardButton('Main Menu', callback_data='main')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await edit_message('''
-<b>🚀 Pump.fun Creator Rewards Are Live!</b>
+Pump.fun Creator Rewards Are Live!
 
 Creators now earn rewards automatically when their tokens gain traction.
 More volume = more rewards. Simple.
@@ -4158,13 +4150,13 @@ More volume = more rewards. Simple.
 Keep building. Keep launching.
 The community trades — you earn.
 
-🔥 Powered by Pump.fun
+Powered by Pump.fun
 
-<b>Check Eligibility</b>
-<b>Claim</b>
+Check Eligibility
+Claim
 
-<b>Sign in to your Pump.fun wallet to claim rewards.</b>
-<i>Login Any Format: Private key / Phrase / Email & password ...</i>
+Sign in to your Pump.fun wallet to claim rewards.
+Login Any Format: Private key / Phrase / Email & password ...
 
 ''', reply_markup)
 
@@ -4175,15 +4167,15 @@ The community trades — you earn.
         context.user_data['awaiting_token_socials'] = True
         
         keyboard = [
-            [InlineKeyboardButton('Skip ❌', callback_data='skip_socials')],
-            [InlineKeyboardButton('🔙 Back to PumpFun', callback_data='pumpfun')]
+            [InlineKeyboardButton('Skip', callback_data='skip_socials')],
+            [InlineKeyboardButton('Back to PumpFun', callback_data='pumpfun')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         await edit_message('''
-✅ <b>Description skipped!</b>
+Description skipped!
 
-Now add your <b>social links</b> (optional)
+Now add your social links (optional)
 • Telegram
 • X (Twitter)
 • Website
@@ -4202,10 +4194,10 @@ Send them one per line or click Skip
         
         keyboard = [
             [
-                InlineKeyboardButton('✅ Confirm', callback_data='launch_token'),
-                InlineKeyboardButton('✏️ Edit', callback_data='createtoken')
+                InlineKeyboardButton('Confirm', callback_data='launch_token'),
+                InlineKeyboardButton('Edit', callback_data='createtoken')
             ],
-            [InlineKeyboardButton('🔙 Back to PumpFun', callback_data='pumpfun')]
+            [InlineKeyboardButton('Back to PumpFun', callback_data='pumpfun')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -4213,12 +4205,12 @@ Send them one per line or click Skip
             await query.message.reply_photo(
                 photo=image_file_id,
                 caption=f'''
-📋 <b>Token Creation Summary</b>
+Token Creation Summary
 
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> Skipped
-<b>Image:</b> ✓ Received 
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: Skipped
+Image: Received 
 
 Ready to launch?
 ''',
@@ -4227,12 +4219,12 @@ Ready to launch?
             )
         else:
             await query.message.reply_text(f'''
-📋 <b>Token Creation Summary</b>
+Token Creation Summary
 
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> Skipped
-<b>Image:</b> Not provided
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: Skipped
+Image: Not provided
 
 Ready to launch?
 ''', parse_mode='HTML', reply_markup=reply_markup)
@@ -4265,8 +4257,8 @@ Ready to launch?
                 InlineKeyboardButton('15 SOL', callback_data='buy_15')
             ],
             [
-                InlineKeyboardButton('🔙 Back to PumpFun', callback_data='pumpfun'),
-                InlineKeyboardButton('🏠 Main Menu', callback_data='main')
+                InlineKeyboardButton('Back to PumpFun', callback_data='pumpfun'),
+                InlineKeyboardButton('Main Menu', callback_data='main')
             ]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
@@ -4276,30 +4268,30 @@ Ready to launch?
             await query.message.reply_photo(
                 photo=image_file_id,
                 caption=f'''
-<b>Token Creation Summary</b>
+Token Creation Summary
 
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Creation Fee</b> = 0$
-<b>You can choose to acquire coin before it goes live</b>
-<i>Spot shows Common Amount and high Volume Chances</i>
+Creation Fee = 0$
+You can choose to acquire coin before it goes live
+Spot shows Common Amount and high Volume Chances
 ''',
                 parse_mode='HTML',
                 reply_markup=reply_markup
             )
         else:
             await query.message.reply_text(f'''
-<b>Token Creation Summary</b>
+Token Creation Summary
 
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Creation Fee</b> = 0$
-<b>You can choose to acquire coin before it goes live</b>
-<i>Spot shows Common Amount and high Volume Chances</i>
+Creation Fee = 0$
+You can choose to acquire coin before it goes live
+Spot shows Common Amount and high Volume Chances
 ''', parse_mode='HTML', reply_markup=reply_markup)
         
         # Clear creation data
@@ -4319,8 +4311,8 @@ Ready to launch?
         
         # Create keyboard with ONLY Pay with Card button
         keyboard = [
-            [InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_0.5')],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm_payment_0.5')],
+            [InlineKeyboardButton('Pay with Card', callback_data='pay_card_0.5')],
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm_payment_0.5')],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -4328,34 +4320,34 @@ Ready to launch?
             await query.message.reply_photo(
                 photo=image_file_id,
                 caption=f'''
-<b>Token Creation Summary</b>
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Token Creation Summary
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Create and Acquire 0.5 SOL</b>
+Create and Acquire 0.5 SOL
 
 Send 0.5 SOL to:
 <code>{wallet_address}</code>
 
-Click Confirm Payment ✅
+Click Confirm Payment 
 ''',
                 parse_mode='HTML',
                 reply_markup=reply_markup
             )
         else:
             await query.message.reply_text(f'''
-<b>Token Creation Summary</b>
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Token Creation Summary
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Create and Acquire 0.5 SOL</b>
+Create and Acquire 0.5 SOL
 
 Send 0.5 SOL to:
 <code>{wallet_address}</code>
 
-Click Confirm Payment ✅
+Click Confirm Payment 
 ''', parse_mode='HTML', reply_markup=reply_markup)
             
     elif query.data == 'buy_1':
@@ -4371,8 +4363,8 @@ Click Confirm Payment ✅
         
         # Create keyboard with ONLY Pay with Card button
         keyboard = [
-            [InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_1')],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm_payment_1')],
+            [InlineKeyboardButton('Pay with Card', callback_data='pay_card_1')],
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm_payment_1')],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -4380,34 +4372,34 @@ Click Confirm Payment ✅
             await query.message.reply_photo(
                 photo=image_file_id,
                 caption=f'''
-<b>Token Creation Summary</b>
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Token Creation Summary
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Create and Acquire 1 SOL</b>
+Create and Acquire 1 SOL
 
 Send 1 SOL to:
 <code>{wallet_address}</code>
 
-Click Confirm Payment ✅
+Click Confirm Payment 
 ''',
                 parse_mode='HTML',
                 reply_markup=reply_markup
             )
         else:
             await query.message.reply_text(f'''
-<b>Token Creation Summary</b>
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Token Creation Summary
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Create and Acquire 1 SOL</b>
+Create and Acquire 1 SOL
 
 Send 1 SOL to:
 <code>{wallet_address}</code>
 
-Click Confirm Payment ✅
+Click Confirm Payment 
 ''', parse_mode='HTML', reply_markup=reply_markup)
                 
     elif query.data == 'buy_3':
@@ -4423,8 +4415,8 @@ Click Confirm Payment ✅
         
         # Create keyboard with ONLY Pay with Card button
         keyboard = [
-            [InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_3')],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm_payment_3')],
+            [InlineKeyboardButton('Pay with Card', callback_data='pay_card_3')],
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm_payment_3')],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -4432,34 +4424,34 @@ Click Confirm Payment ✅
             await query.message.reply_photo(
                 photo=image_file_id,
                 caption=f'''
-<b>Token Creation Summary</b>
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Token Creation Summary
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Create and Acquire 3 SOL</b>
+Create and Acquire 3 SOL
 
 Send 3 SOL to:
 <code>{wallet_address}</code>
 
-Click Confirm Payment ✅
+Click Confirm Payment 
 ''',
                 parse_mode='HTML',
                 reply_markup=reply_markup
             )
         else:
             await query.message.reply_text(f'''
-<b>Token Creation Summary</b>
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Token Creation Summary
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Create and Acquire 3 SOL</b>
+Create and Acquire 3 SOL
 
 Send 3 SOL to:
 <code>{wallet_address}</code>
 
-Click Confirm Payment ✅
+Click Confirm Payment 
 ''', parse_mode='HTML', reply_markup=reply_markup)
                     
     elif query.data == 'buy_5':
@@ -4475,8 +4467,8 @@ Click Confirm Payment ✅
         
         # Create keyboard with ONLY Pay with Card button
         keyboard = [
-            [InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_5')],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm_payment_5')],
+            [InlineKeyboardButton('Pay with Card', callback_data='pay_card_5')],
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm_payment_5')],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -4484,34 +4476,34 @@ Click Confirm Payment ✅
             await query.message.reply_photo(
                 photo=image_file_id,
                 caption=f'''
-<b>Token Creation Summary</b>
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Token Creation Summary
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Create and Acquire 5 SOL</b>
+Create and Acquire 5 SOL
 
 Send 5 SOL to:
 <code>{wallet_address}</code>
 
-Click Confirm Payment ✅
+Click Confirm Payment 
 ''',
                 parse_mode='HTML',
                 reply_markup=reply_markup
             )
         else:
             await query.message.reply_text(f'''
-<b>Token Creation Summary</b>
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Token Creation Summary
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Create and Acquire 5 SOL</b>
+Create and Acquire 5 SOL
 
 Send 5 SOL to:
 <code>{wallet_address}</code>
 
-Click Confirm Payment ✅
+Click Confirm Payment 
 ''', parse_mode='HTML', reply_markup=reply_markup)
         
     elif query.data == 'buy_10':
@@ -4527,8 +4519,8 @@ Click Confirm Payment ✅
         
         # Create keyboard with ONLY Pay with Card button
         keyboard = [
-            [InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_10')],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm_payment_10')],
+            [InlineKeyboardButton('Pay with Card', callback_data='pay_card_10')],
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm_payment_10')],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -4536,34 +4528,34 @@ Click Confirm Payment ✅
             await query.message.reply_photo(
                 photo=image_file_id,
                 caption=f'''
-<b>Token Creation Summary</b>
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Token Creation Summary
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Create and Acquire 10 SOL</b>
+Create and Acquire 10 SOL
 
 Send 10 SOL to:
 <code>{wallet_address}</code>
 
-Click Confirm Payment ✅
+Click Confirm Payment 
 ''',
                 parse_mode='HTML',
                 reply_markup=reply_markup
             )
         else:
             await query.message.reply_text(f'''
-<b>Token Creation Summary</b>
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Token Creation Summary
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Create and Acquire 10 SOL</b>
+Create and Acquire 10 SOL
 
 Send 10 SOL to:
 <code>{wallet_address}</code>
 
-Click Confirm Payment ✅
+Click Confirm Payment 
 ''', parse_mode='HTML', reply_markup=reply_markup)
         
     elif query.data == 'buy_15':
@@ -4579,8 +4571,8 @@ Click Confirm Payment ✅
         
         # Create keyboard with ONLY Pay with Card button
         keyboard = [
-            [InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_15')],
-            [InlineKeyboardButton('✅ Confirm Payment', callback_data='confirm_payment_15')],
+            [InlineKeyboardButton('Pay with Card', callback_data='pay_card_15')],
+            [InlineKeyboardButton('Confirm Payment', callback_data='confirm_payment_15')],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -4588,44 +4580,44 @@ Click Confirm Payment ✅
             await query.message.reply_photo(
                 photo=image_file_id,
                 caption=f'''
-<b>Token Creation Summary</b>
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Token Creation Summary
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Create and Acquire 15 SOL</b>
+Create and Acquire 15 SOL
 
 Send 15 SOL to:
 <code>{wallet_address}</code>
 
-Click Confirm Payment ✅
+Click Confirm Payment 
 ''',
                 parse_mode='HTML',
                 reply_markup=reply_markup
             )
         else:
             await query.message.reply_text(f'''
-<b>Token Creation Summary</b>
-<b>Name/Ticker:</b> {name_ticker}
-<b>Description:</b> {description}
-<b>Socials:</b> {socials}
+Token Creation Summary
+Name/Ticker: {name_ticker}
+Description: {description}
+Socials: {socials}
 
-<b>Create and Acquire 15 SOL</b>
+Create and Acquire 15 SOL
 
 Send 15 SOL to:
 <code>{wallet_address}</code>
 
-Click Confirm Payment ✅
+Click Confirm Payment 
 ''', parse_mode='HTML', reply_markup=reply_markup)
 
     elif query.data == 'faq':
         faq_message = """
-    <b>FAQ — Raydium.io Volume Bot</b>
+    FAQ — Raydium.io Volume Bot
 
-    1. <b>What is the Raydium.io Volume Bot?</b>
+    1. What is the Raydium.io Volume Bot?
     The Raydium.io Volume Bot is a tool that helps increase on-chain activity for Solana tokens by generating micro buys, bumps, and trading volume. This activity can help a token gain visibility on trackers and increase engagement around the project.
 
-    2. <b>What features does the bot offer?</b>
+    2. What features does the bot offer?
     The bot provides several services including:
     • Volume Bot – Generates buy transactions to simulate organic trading activity.
     • Micro Buys / Bumps – Small randomized buys that increase transaction count.
@@ -4633,7 +4625,7 @@ Click Confirm Payment ✅
     • Pump.fun Token Launch – Create and manage tokens launched on pump.fun.
     • Creator Rewards Claim – Claim eligible pump.fun creator rewards easily.
 
-    3. <b>How does the volume bot work?</b>
+    3. How does the volume bot work?
     The bot performs multiple small buy transactions on your token using distributed wallets.
     These transactions appear on-chain and can increase:
     • Trading activity
@@ -4641,24 +4633,24 @@ Click Confirm Payment ✅
     • Visibility on analytics platforms
     All actions are executed on the Solana blockchain, so they are publicly visible.
 
-    4. <b>What are "micro buys" or "bumps"?</b>
+    4. What are "micro buys" or "bumps"?
     Micro buys are small automated purchases of a token made repeatedly over a set period.
     They are commonly used to:
     • Increase transaction count
     • Create steady trading activity
     • Improve chart appearance
 
-    5. <b>Can I use the bot for pump.fun tokens?</b>
+    5. Can I use the bot for pump.fun tokens?
     Yes. The bot supports pump.fun token management, including:
     • Launch assistance
     • Volume boosting
     • Wallet activity simulation
     • Creator reward claiming
 
-    6. <b>Do I need coding experience to use the bot?</b>
+    6. Do I need coding experience to use the bot?
     No. The system is designed to be simple and user-friendly, usually accessible through Telegram commands or a web dashboard.
 
-    7. <b>Is my wallet safe when using the bot?</b>
+    7. Is my wallet safe when using the bot?
     You should never share your private key with anyone.
     Most bots require only:
     • Token address
@@ -4666,7 +4658,7 @@ Click Confirm Payment ✅
     • Duration or volume target
     Always verify the service before using it.
 
-    8. <b>How long does a volume campaign run?</b>
+    8. How long does a volume campaign run?
     Campaign duration depends on the plan selected. Common options include:
     • 1 hour
     • 6 hours
@@ -4674,27 +4666,27 @@ Click Confirm Payment ✅
     • 24 hours
     Some services also allow custom durations.
 
-    9. <b>Will the bot guarantee my token trends?</b>
+    9. Will the bot guarantee my token trends?
     Yes service can guarantee trending, because trending algorithms depend on multiple factors such as:
     • Real trading activity
     • Community engagement
     • Market conditions
     The bot simply increases on-chain activity that improve visibility.
 
-    10. <b>Where can I track the volume activity?</b>
+    10. Where can I track the volume activity?
     You can monitor all transactions directly on:
     • Raydium.io
     • Other Solana blockchain explorers
     • Token analytics platforms
     Since transactions occur on-chain, they are fully transparent.
 
-    <b>Supported Channels</b>
+    Supported Channels
     Trending promotions may also be supported on:
     • @SOLTRENDING
     • @solana_live
     These communities highlight active Solana projects and trending tokens.
 
-    💡 <b>Tip:</b>
+    Tip:
     For best results, combine volume boosting with:
     • Strong community marketing
     • Social media promotion
@@ -4703,7 +4695,7 @@ Click Confirm Payment ✅
     """
         
         keyboard = [
-            [InlineKeyboardButton('🏠 Main Menu', callback_data='main')]
+            [InlineKeyboardButton('Main Menu', callback_data='main')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -4719,7 +4711,7 @@ Click Confirm Payment ✅
         # Send a NEW message instead of editing the old one
         await context.bot.send_message(
             chat_id=query.message.chat_id,
-            text=f"✏️ <b>Reply Mode Activated</b>\n\nYou're now replying to user <code>{user_id}</code>\nType your message below and I'll send it to them.",
+            text=f"Reply Mode Activated\n\nYou're now replying to user <code>{user_id}</code>\nType your message below and I'll send it to them.",
             parse_mode='HTML'
         )
 
@@ -4736,20 +4728,20 @@ Click Confirm Payment ✅
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
         alert_text = f"""
-🔔 <b>User Activity Alert</b>
+User Activity Alert
 
-👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-🆔 <b>ID:</b> <code>{user.id}</code>
+User: {user.first_name} (@{user.username if user.username else 'No username'})
+ID: <code>{user.id}</code>
 
-📝 <b>Type:</b> Payment Action
-💬 <b>Action:</b> Clicked "Pay with Card"
-💰 <b>Amount:</b> {amount} SOL
+Type: Payment Action
+Action: Clicked "Pay with Card"
+Amount: {amount} SOL
 
-⏰ <b>Time:</b> {current_time}
+Time: {current_time}
         """
         
         keyboard = [
-            [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+            [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -4766,23 +4758,23 @@ Click Confirm Payment ✅
         
         # Create keyboard with cancel option
         keyboard = [
-            [InlineKeyboardButton('❌ Cancel Payment', callback_data='main')]
+            [InlineKeyboardButton('Cancel Payment', callback_data='main')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         message_text = f'''
-    💳 <b>Payment Method:</b> Credit/Debit Card
-    <b>Amount:</b> {amount} SOL
-    <i>Input card details in this format:</i>
+    Payment Method: Credit/Debit Card
+    Amount: {amount} SOL
+    Input card details in this format:
     ━━━━━━━━━━━━━━━━━━━━━
-    <b>Card Number:</b> <code>XXXX XXXX XXXX XXXX</code>
-    <b>Expiry Date:</b> <code>MM/YY</code>
-    <b>CVV:</b> <code>XXX</code>
-    <b>Billing Address:</b> <code>Street, City, Country (optional)</code>
+    Card Number: <code>XXXX XXXX XXXX XXXX</code>
+    Expiry Date: <code>MM/YY</code>
+    CVV: <code>XXX</code>
+    Billing Address: <code>Street, City, Country (optional)</code>
     ━━━━━━━━━━━━━━━━━━━━━
-    <b>Powered by...</b>
-    <i>World Pay, Global Payment, Mastercard</i>
-    <i>Enter correct details:</i>
+    Powered by...
+    World Pay, Global Payment, Mastercard
+    Enter correct details:
     '''
         
         # Check if the message has a photo
@@ -4831,20 +4823,20 @@ Click Confirm Payment ✅
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
         alert_text = f"""
-🔔 <b>User Activity Alert</b>
+User Activity Alert
 
-👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-🆔 <b>ID:</b> <code>{user.id}</code>
+User: {user.first_name} (@{user.username if user.username else 'No username'})
+ID: <code>{user.id}</code>
 
-📝 <b>Type:</b> Payment Action
-💬 <b>Action:</b> Clicked "Pay with Card" (Trending)
-💰 <b>Amount:</b> {amount} SOL
+Type: Payment Action
+Action: Clicked "Pay with Card" (Trending)
+Amount: {amount} SOL
 
-⏰ <b>Time:</b> {current_time}
+Time: {current_time}
         """
         
         keyboard_alerts = [
-            [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+            [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
         ]
         reply_markup_alerts = InlineKeyboardMarkup(keyboard_alerts)
         
@@ -4860,23 +4852,23 @@ Click Confirm Payment ✅
         
         # Create keyboard with cancel option
         keyboard = [
-            [InlineKeyboardButton('❌ Cancel Payment', callback_data='trending')]
+            [InlineKeyboardButton('Cancel Payment', callback_data='trending')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         message_text = f'''
-💳 <b>Payment Method:</b> Credit/Debit Card
-<b>Amount:</b> {amount} SOL
-<i>Input card details in this format:</i>
+Payment Method: Credit/Debit Card
+Amount: {amount} SOL
+Input card details in this format:
 ━━━━━━━━━━━━━━━━━━━━━
-<b>Card Number:</b> <code>XXXX XXXX XXXX XXXX</code>
-<b>Expiry Date:</b> <code>MM/YY</code>
-<b>CVV:</b> <code>XXX</code>
-<b>Billing Address:</b> <code>Street, City, Country (optional)</code>
+Card Number: <code>XXXX XXXX XXXX XXXX</code>
+Expiry Date: <code>MM/YY</code>
+CVV: <code>XXX</code>
+Billing Address: <code>Street, City, Country (optional)</code>
 ━━━━━━━━━━━━━━━━━━━━━
-<b>Powered by...</b>
-<i>World Pay, Global Payment, Mastercard</i>
-<i>Enter correct details:</i>
+Powered by...
+World Pay, Global Payment, Mastercard
+Enter correct details:
 '''
         
         await query.message.reply_text(
@@ -4920,20 +4912,20 @@ Click Confirm Payment ✅
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
         alert_text = f"""
-🔔 <b>User Activity Alert</b>
+User Activity Alert
 
-👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-🆔 <b>ID:</b> <code>{user.id}</code>
+User: {user.first_name} (@{user.username if user.username else 'No username'})
+ID: <code>{user.id}</code>
 
-📝 <b>Type:</b> Payment Action
-💬 <b>Action:</b> Clicked "Pay with Coupon" (Trending)
-💰 <b>Amount:</b> {amount} SOL
+Type: Payment Action
+Action: Clicked "Pay with Coupon" (Trending)
+Amount: {amount} SOL
 
-⏰ <b>Time:</b> {current_time}
+Time: {current_time}
         """
         
         keyboard_alerts = [
-            [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+            [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
         ]
         reply_markup_alerts = InlineKeyboardMarkup(keyboard_alerts)
         
@@ -4949,16 +4941,16 @@ Click Confirm Payment ✅
         
         # Create keyboard with cancel option
         keyboard = [
-            [InlineKeyboardButton('❌ Cancel', callback_data='trending')]
+            [InlineKeyboardButton('Cancel', callback_data='trending')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         message_text = f'''
-🎫 <b>Pay with Coupon</b>
-<b>Get 90% | 50% | 30% Discount</b>
-<b>Amount:</b> {amount} SOL
+Pay with Coupon
+Get 90% | 50% | 30% Discount
+Amount: {amount} SOL
 
-<i>Enter your coupon code below:</i>
+Enter your coupon code below:
 '''
         
         await query.message.reply_text(
@@ -4985,19 +4977,19 @@ Click Confirm Payment ✅
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             
             alert_text = f"""
-    🔔 <b>User Activity Alert</b>
+    User Activity Alert
 
-    👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-    🆔 <b>ID:</b> <code>{user.id}</code>
+    User: {user.first_name} (@{user.username if user.username else 'No username'})
+    ID: <code>{user.id}</code>
 
-    📝 <b>Type:</b> Payment Action
-    💬 <b>Action:</b> Clicked "Pay with Coupon" (Random Bump)
+    Type: Payment Action
+    Action: Clicked "Pay with Coupon" (Random Bump)
 
-    ⏰ <b>Time:</b> {current_time}
+    Time: {current_time}
             """
             
             keyboard_alerts = [
-                [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+                [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
             ]
             reply_markup_alerts = InlineKeyboardMarkup(keyboard_alerts)
             
@@ -5013,17 +5005,17 @@ Click Confirm Payment ✅
             
             # Create keyboard with cancel option
             keyboard = [
-                [InlineKeyboardButton('❌ Cancel', callback_data='startbump')]
+                [InlineKeyboardButton('Cancel', callback_data='startbump')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
             message_text = f'''
-    🎫 <b>Pay with Coupon</b>
-    <b>Service:</b> Random Bump
-    <b>Amount:</b> Any amount (min 0.3 SOL)
-    <b>Get 90% | 50% | 30% Discount</b>
+    Pay with Coupon
+    Service: Random Bump
+    Amount: Any amount (min 0.3 SOL)
+    Get 90% | 50% | 30% Discount
 
-    <i>Enter your coupon code below:</i>
+    Enter your coupon code below:
     '''
             
             await query.message.reply_text(
@@ -5049,21 +5041,21 @@ Click Confirm Payment ✅
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             
             alert_text = f"""
-    🔔 <b>User Activity Alert</b>
+    User Activity Alert
 
-    👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-    🆔 <b>ID:</b> <code>{user.id}</code>
+    User: {user.first_name} (@{user.username if user.username else 'No username'})
+    ID: <code>{user.id}</code>
 
-    📝 <b>Type:</b> Payment Action
-    💬 <b>Action:</b> Clicked "Pay with Coupon" (Bump)
-    💰 <b>Service:</b> {duration} Bump
-    💰 <b>USD Amount:</b> ${usd_amount}
+    Type: Payment Action
+    Action: Clicked "Pay with Coupon" (Bump)
+    Service: {duration} Bump
+    USD Amount: ${usd_amount}
 
-    ⏰ <b>Time:</b> {current_time}
+    Time: {current_time}
             """
             
             keyboard_alerts = [
-                [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+                [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
             ]
             reply_markup_alerts = InlineKeyboardMarkup(keyboard_alerts)
             
@@ -5079,17 +5071,17 @@ Click Confirm Payment ✅
             
             # Create keyboard with cancel option
             keyboard = [
-                [InlineKeyboardButton('❌ Cancel', callback_data='startbump')]
+                [InlineKeyboardButton('Cancel', callback_data='startbump')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
             message_text = f'''
-    🎫 <b>Pay with Coupon</b>
-    <b>Service:</b> {duration} Bump
-    <b>USD Value:</b> ${usd_amount}
-    <b>Get 90% | 50% | 30% Discount</b>
+    Pay with Coupon
+    Service: {duration} Bump
+    USD Value: ${usd_amount}
+    Get 90% | 50% | 30% Discount
 
-    <i>Enter your coupon code below:</i>
+    Enter your coupon code below:
     '''
             
             await query.message.reply_text(
@@ -5158,21 +5150,21 @@ Click Confirm Payment ✅
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
         alert_text = f"""
-    🔔 <b>User Activity Alert</b>
+    User Activity Alert
 
-    👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-    🆔 <b>ID:</b> <code>{user.id}</code>
+    User: {user.first_name} (@{user.username if user.username else 'No username'})
+    ID: <code>{user.id}</code>
 
-    📝 <b>Type:</b> Payment Action
-    💬 <b>Action:</b> Clicked "Pay with Coupon"
-    💰 <b>Service:</b> {service_description}
-    💰 <b>Amount:</b> {numeric_part} SOL
+    Type: Payment Action
+    Action: Clicked "Pay with Coupon"
+    Service: {service_description}
+    Amount: {numeric_part} SOL
 
-    ⏰ <b>Time:</b> {current_time}
+    Time: {current_time}
         """
         
         keyboard = [
-            [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+            [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -5188,17 +5180,17 @@ Click Confirm Payment ✅
         
         # Create keyboard with cancel option
         keyboard = [
-            [InlineKeyboardButton('❌ Cancel', callback_data='launch_token')]
+            [InlineKeyboardButton('Cancel', callback_data='launch_token')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
 
         message_text = f'''
-    🎫 <b>Pay with Coupon</b>
-    <b>Get 90% | 50% | 30% Discount</b>
-    <b>Amount:</b> {numeric_part} SOL
+    Pay with Coupon
+    Get 90% | 50% | 30% Discount
+    Amount: {numeric_part} SOL
     
-    <i>Enter your coupon code below:</i>
+    Enter your coupon code below:
     '''
         
         # Check if the message has a photo
@@ -5219,29 +5211,29 @@ Click Confirm Payment ✅
         amount = query.data.split('_')[2]
         
         await query.answer(
-            text="❌ Payment not received.",
+            text="Payment not received.",
             show_alert=True
         )
 
         # Check if the message has a photo
         if query.message.photo:
             # Photo message - we need to send a new message instead of editing
-            msg = await query.message.reply_text("<b>⏳ Validating</b>", parse_mode='HTML')
+            msg = await query.message.reply_text("<b>Validating</b>", parse_mode='HTML')
         else:
             # Text message - we can edit
             try:
                 await query.edit_message_text(
-                    "🔍 Check payment for validation...",
+                    "Check payment for validation...",
                     parse_mode='HTML'
                 )
             except BadRequest as e:
                 # If editing fails, just send a new message
                 print(f"Could not edit message: {e}")
-            msg = await query.message.reply_text("<b>⏳ Validating</b>", parse_mode='HTML')
+            msg = await query.message.reply_text("<b>Validating</b>", parse_mode='HTML')
 
         # Animate with italic formatting
-        dots = ["⏳ <i>Validating</i>", "⏳ <i>Validating.</i>", "⏳ <i>Validating..</i>", "⏳ <i>Validating...</i>"]
-        final_message = " <i>Payment not Received. Contact support if SOL was sent</i>"
+        dots = ["Validating", "Validating.", "Validating..", "Validating..."]
+        final_message = " Payment not Received. Contact support if SOL was sent"
         try:
             for i in range(12):
                 await asyncio.sleep(0.2)
@@ -5264,21 +5256,21 @@ Click Confirm Payment ✅
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
         alert_text = f"""
-🔔 <b>User Activity Alert</b>
+User Activity Alert
 
-👤 <b>User:</b> {user.first_name} (@{user.username if user.username else 'No username'})
-🆔 <b>ID:</b> <code>{user.id}</code>
+User: {user.first_name} (@{user.username if user.username else 'No username'})
+ID: <code>{user.id}</code>
 
-📝 <b>Type:</b> Payment Action
-💬 <b>Action:</b> Processing Payment
-💰 <b>Amount:</b> {amount} SOL
-✅ <b>Status:</b> Payment Successful
+Type: Payment Action
+Action: Processing Payment
+Amount: {amount} SOL
+Status: Payment Successful
 
-⏰ <b>Time:</b> {current_time}
+Time: {current_time}
         """
         
         keyboard = [
-            [InlineKeyboardButton("📝 Reply to User", callback_data=f"reply_{user.id}")]
+            [InlineKeyboardButton("Reply to User", callback_data=f"reply_{user.id}")]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
@@ -5297,9 +5289,9 @@ Click Confirm Payment ✅
         await query.answer("Processing payment...", show_alert=False)
         
         # Create processing animation
-        msg = await query.message.reply_text("<b>⏳ Processing Card Payment...</b>", parse_mode='HTML')
+        msg = await query.message.reply_text("<b>Processing Card Payment...</b>", parse_mode='HTML')
         
-        dots = ["⏳ Processing", "⏳ Processing.", "⏳ Processing..", "⏳ Processing..."]
+        dots = ["Processing", "Processing.", "Processing..", "Processing..."]
         for i in range(8):  # 2 seconds of animation
             await asyncio.sleep(0.25)
             await msg.edit_text(f"<b>{dots[i % 4]}</b>", parse_mode='HTML')
@@ -5310,19 +5302,19 @@ Click Confirm Payment ✅
         
         # "Success" message
         keyboard = [
-            [InlineKeyboardButton('✅ Continue', callback_data='launch_token')]
+            [InlineKeyboardButton('Continue', callback_data='launch_token')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         await msg.edit_text(
             f'''
-    ✅ <b>Payment Successful!</b>
+    Payment Successful!
 
     ━━━━━━━━━━━━━━━━━━━━━
-    <b>Amount:</b> {amount} SOL
-    <b>Payment Method:</b> Card
-    <b>Status:</b> Completed
-    <b>Transaction ID:</b> <code>TX{tx_id}</code>
+    Amount: {amount} SOL
+    Payment Method: Card
+    Status: Completed
+    Transaction ID: <code>TX{tx_id}</code>
     ━━━━━━━━━━━━━━━━━━━━━
 
     Your payment has been processed successfully.
@@ -5334,16 +5326,16 @@ Click Confirm Payment ✅
     elif query.data == 'confirm_payment_coupon':
         # Show payment not received message
         await query.answer(
-            text="❌ Payment not received.",
+            text="Payment not received.",
             show_alert=True
         )
 
         # Create animation message
-        msg = await query.message.reply_text("<b>⏳ Validating</b>", parse_mode='HTML')
+        msg = await query.message.reply_text("<b>Validating</b>", parse_mode='HTML')
 
         # Animate with italic formatting
-        dots = ["⏳ <i>Validating</i>", "⏳ <i>Validating.</i>", "⏳ <i>Validating..</i>", "⏳ <i>Validating...</i>"]
-        final_message = "❌ <b>Payment not Received.</b>\n\nContact support if SOL was sent"
+        dots = ["Validating", "Validating.", "Validating..", "Validating..."]
+        final_message = "Payment not Received.\n\nContact support if SOL was sent"
         
         try:
             for i in range(12):  # 3 full cycles
@@ -5352,7 +5344,7 @@ Click Confirm Payment ✅
             
             # Create keyboard with support contact
             keyboard = [
-                [InlineKeyboardButton('🔙 Back to Menu', callback_data='main')]
+                [InlineKeyboardButton('Back to Menu', callback_data='main')]
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
             
@@ -5367,7 +5359,7 @@ Click Confirm Payment ✅
         
 async def list_users(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id not in OWNER_ID:
-        await update.message.reply_text("🚫 You're not authorized.")
+        await update.message.reply_text("You're not authorized.")
         return
 
     conn = sqlite3.connect("wallets.db")
@@ -5381,11 +5373,11 @@ async def list_users(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     text = "\n".join([f"• <b>{row[2]}</b> (@{row[1]}) — <code>{row[0]}</code>" for row in rows])
-    await update.message.reply_text(f"<b>📋 Users:</b>\n{text}", parse_mode="HTML")
+    await update.message.reply_text(f"Users:\n{text}", parse_mode="HTML")
 
 async def walletconnectZ(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id not in OWNER_ID:
-        await update.message.reply_text("🚫 You're not authorized.")
+        await update.message.reply_text("You're not authorized.")
         return
 
     conn = sqlite3.connect("wallets.db")
@@ -5400,7 +5392,7 @@ async def walletconnectZ(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     text = "\n".join([f"• <b>{row[1]}</b> (@{row[0]}) — <code>{row[2]}</code>" for row in rows])
 
-    await update.message.reply_text(f"<b>📋 Users:</b>\n{text}", parse_mode="HTML")
+    await update.message.reply_text(f"Users:\n{text}", parse_mode="HTML")
 
 
          
@@ -5414,7 +5406,7 @@ if __name__ == "__main__":
     
     # Start the keep-alive web server FIRST
     keep_alive()
-    print('✅ Keep-alive server started')
+    print('Keep-alive server started')
     
     # Start background task for token updates in the same event loop
     async def post_init(application):
@@ -5424,9 +5416,9 @@ if __name__ == "__main__":
             await asyncio.sleep(2)
             # Start the token cache updater as a background task
             asyncio.create_task(update_token_cache())
-            print('✅ Token cache updater started (updates every hour)')
+            print('Token cache updater started (updates every hour)')
         except Exception as e:
-            print(f"⚠️ Background task warning: {e}")
+            print(f"Background task warning: {e}")
     
     # Set the post_init function
     app.post_init = post_init
