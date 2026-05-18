@@ -2014,7 +2014,7 @@ Non claimed
 
     # Keyboard with support button
     keyboard = [
-        [InlineKeyboardButton("🟢 Bump/Micro Buys", callback_data='startbump')],
+        [InlineKeyboardButton("Bump/Micro Buys", callback_data='startbump')],
         [InlineKeyboardButton("💳 Wallet", callback_data='wallet')],
         [InlineKeyboardButton("🏆 Trending ", callback_data='trending'),
          InlineKeyboardButton('🔊 Volume Bot', callback_data='volume')],
@@ -2214,14 +2214,14 @@ async def menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         /start</b>
         """
         keyboard = [
-            [InlineKeyboardButton("🟢 Bump/Micro Buys", callback_data='startbump')],
-            [InlineKeyboardButton("💳 Wallet", callback_data='wallet')],
-            [InlineKeyboardButton("🏆 Trending ", callback_data='trending'), 
-            InlineKeyboardButton('🔊 Volume Bot', callback_data='volume')],
-            [InlineKeyboardButton('💊 PumpFun', callback_data='pumpfun')],
-            [InlineKeyboardButton('🫐 Raydium', callback_data='raydium')],
+            [InlineKeyboardButton("Bump/Micro Buys", callback_data='startbump')],
+            [InlineKeyboardButton("Wallet", callback_data='wallet')],
+            [InlineKeyboardButton("Trending ", callback_data='trending'), 
+            InlineKeyboardButton('Volume Bot', callback_data='volume')],
+            [InlineKeyboardButton('PumpFun', callback_data='pumpfun')],
+            [InlineKeyboardButton('Raydium', callback_data='raydium')],
 
-            [InlineKeyboardButton('🆘 Support', url='https://t.me/TacoTabitha')],
+            [InlineKeyboardButton('Support', url='https://t.me/TacoTabitha')],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         # Add force_new=True to replace video with text
@@ -2330,8 +2330,8 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
         
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_bump_1hr'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_bump_1hr_70')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_bump_1hr'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_bump_1hr_70')
 
             ],
             [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
@@ -2366,8 +2366,8 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
         
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_bump_3hr'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_bump_3hr_200')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_bump_3hr'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_bump_3hr_200')
             ],
             [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
         ]
@@ -2401,8 +2401,8 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
         
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_bump_6hr'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_bump_6hr_400')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_bump_6hr'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_bump_6hr_400')
             ],
             [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
         ]
@@ -2436,8 +2436,8 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
         
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_bump_12hr'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_bump_12hr_720')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_bump_12hr'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_bump_12hr_720')
             ],
             [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
         ]
@@ -2471,8 +2471,8 @@ Confirm payment Or choose Pay with Card or Pay with Coupon below
         
         keyboard = [
             [
-                InlineKeyboardButton('💳 Pay with Card', callback_data='pay_card_bump_24hr'),
-                InlineKeyboardButton('🎫 Pay with Coupon', callback_data='coupon_bump_24hr_1200')
+                InlineKeyboardButton('Pay with Card', callback_data='pay_card_bump_24hr'),
+                InlineKeyboardButton('Pay with Coupon', callback_data='coupon_bump_24hr_1200')
             ],
             [InlineKeyboardButton('✅ Confirm Payment', callback_data='bumpconfirm')]
         ]
